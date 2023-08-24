@@ -36,7 +36,7 @@ Debe de mostarse algo como esto en la consola. Y posiblemente ta abra un navegad
   <img alt="" src="https://github.com/Requiem4U/Juego_Mate/blob/bcfbc8b075093451cd28d4dabb02c2a8b17e7ef8/Vistas/Captura%20de%20pantalla%202023-08-23%20203849.png">
 </picture>
 
-Para abrir la página en ti navegador precionas ctrl + Clic en la direccion que aparece, o ingresas escribeindo en el navegador http://localhost:4000/. Otra forma es escribir en la consola O (no es cero).
+Para abrir la página en ti navegador precionas ctrl + Clic en la direccion que aparece, o ingresas escribeindo en el navegador http://localhost:4000/. Otra forma es escribir en la consola O.
 
 ## Cambiar las vistas
 
