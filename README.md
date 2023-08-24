@@ -38,6 +38,9 @@ Debe de mostarse algo como esto en la consola. Y posiblemente ta abra un navegad
 
 Para abrir la página en ti navegador precionas ctrl + Clic en la direccion que aparece, o ingresas escribeindo en el navegador http://localhost:4000/. Otra forma es escribir en la consola O.
 
+***Para terminar la ejecución del programa, en la consola precionas Q***
+Nota: cuando estes intentando escribir en la consola no te va a aprecer nada, ningina letra, es normal.
+
 ## Cambiar las vistas
 
 Cada una de las vistas que se ven arriba tienen su codigo, osea no es como que precionando un boton cambien entre una y otra.
