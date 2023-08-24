@@ -1,0 +1,22 @@
+.btnPantallaInicio {
+  position: relative;
+  background: transparent;
+  color: black;
+  padding: 0;
+  width: 100%;
+  height: auto;
+  font-family: "Pixel Operator";
+  font-size: 8vh;
+}
+
+.btnPantallaInicio:hover {
+  border-color: transparent;
+}
+
+@media (max-width: 720px) or (max-height: 480px) {
+  .btnPantallaInicio {
+    width: 142.55px;
+    height: 64.8px;
+    font-size: 38px;
+  }
+}
