@@ -9,13 +9,11 @@ export class Game extends Phaser.Scene {
   }
 
   preload() {
-    this.load.image('background', backgroundImg);
     this.load.spritesheet('player_M', spritesheetP_M, { frameWidth: 128, frameHeight: 128 })
   }
 
   create() {
     const gameContainer = document.getElementById('contenedor_juego');
-    this.add.image(gameContainer.clientWidth / 2, gameContainer.clientHeight / 2, 'background');
 
     this.player = this.physics.add.sprite(gameContainer.clientWidth / 2, gameContainer.clientHeight / 2, 'player_M')
 

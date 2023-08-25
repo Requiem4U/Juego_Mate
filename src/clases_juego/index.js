@@ -11,7 +11,7 @@ const config = {
   physics: {
     default: 'arcade',
     arcade: {
-      gravity: { y: 400 },
+      gravity: { y: 0 },
       debug: false
     }
   }
@@ -20,11 +20,11 @@ const config = {
 let game = new Phaser.Game(config);
 
 function resizeGame() {
+  console.log(gameContainer)
   const newWidth = gameContainer.clientWidth;
   const newHeight = gameContainer.clientHeight;
 
   game.renderer.resize(newWidth, newHeight);
-  console.log(newWidth + '\n' + newHeight)
 }
 
 window.addEventListener('resize', resizeGame);
