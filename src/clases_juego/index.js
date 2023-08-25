@@ -4,8 +4,8 @@ const gameContainer = document.getElementById('contenedor_juego');
 
 const config = {
   type: Phaser.AUTO,
-  width: gameContainer.clientWidth,
-  height: gameContainer.clientHeight,
+  width: '100%',
+  height: '100%',
   parent: 'contenedor_juego',
   scene: [Game],
   physics: {
@@ -17,14 +17,14 @@ const config = {
   }
 }
 
-var game = new Phaser.Game(config);
+let game = new Phaser.Game(config);
 
 function resizeGame() {
   const newWidth = gameContainer.clientWidth;
   const newHeight = gameContainer.clientHeight;
 
   game.renderer.resize(newWidth, newHeight);
-  console.log(1)
+  console.log(newWidth + '\n' + newHeight)
 }
 
 window.addEventListener('resize', resizeGame);

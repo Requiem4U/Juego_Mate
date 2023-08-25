@@ -5,6 +5,8 @@
 
 @media (max-width: 720px) or (max-height: 480px) {
     .contenedorJuego , canvas{
+        margin: 0;
+        padding: 0;
         width: 720px;
         height: 480px;
     }
