@@ -1,6 +1,6 @@
 import Phaser from "phaser";
 import backgroundImg from '../imagenes/fondo1.jpg'
-import spritesheetP_M from '../imagenes/Mujer_Style_Sheets_128x128.png'
+import spritesheetP from '../imagenes/Mujer_Style_Sheets_128x128.png'
 
 const v_m_personaje = 160
 
@@ -8,78 +8,91 @@ const v_m_personaje = 160
 const diagonalVelocity = v_m_personaje * Math.sqrt(0.5);
 // Animacion Idle por defecto
 let animacionIdle = 'idleFront'
+let cursors = {flechas: null, letras: null}
 
 export class Game extends Phaser.Scene {
 
   constructor() {
-    super({ key: 'game' });
+    super({ key: 'game' });    
   }
 
   preload() {
-    this.load.spritesheet('player_M', spritesheetP_M, { frameWidth: 128, frameHeight: 128 })
+    this.load.spritesheet('player', spritesheetP, { frameWidth: 128, frameHeight: 128 })
   }
 
   create() {
+    cursors.flechas = this.input.keyboard.createCursorKeys();
+    cursors.letras = this.input.keyboard.addKeys('W,A,S,D');
+
     const gameContainer = document.getElementById('contenedor_juego');
 
-    this.player = this.physics.add.sprite(this.game.canvas.width / 2, this.game.canvas.height / 2, 'player_M')
+    this.player = this.physics.add.sprite(this.game.canvas.width / 2, this.game.canvas.height / 2, 'player')
 
-    crearAnimacion(this, 'player_M', 'walkDown', 0, 3);
-    crearAnimacion(this, 'player_M', 'walkUp', 4, 7);
-    crearAnimacion(this, 'player_M', 'walkLeft', 8, 11);
-    crearAnimacion(this, 'player_M', 'walkRight', 12, 15);
-    crearAnimacion(this, 'player_M', 'idleFront', 16, 19, 2.1);
-    crearAnimacion(this, 'player_M', 'idleBack', 20, 23, 2.1);
-    crearAnimacion(this, 'player_M', 'idleLeft', 24, 27, 2.1);
-    crearAnimacion(this, 'player_M', 'idleRight', 28, 31, 2.1);
+    // Ceación de animaciones de caminata
+    crearAnimacion(this, 'player', 'walkDown', 0, 3);
+    crearAnimacion(this, 'player', 'walkUp', 4, 7);
+    crearAnimacion(this, 'player', 'walkLeft', 8, 11);
+    crearAnimacion(this, 'player', 'walkRight', 12, 15);
+    //Creación de animación Idle
+    crearAnimacion(this, 'player', 'idleFront', 16, 19, 2.1);
+    crearAnimacion(this, 'player', 'idleBack', 20, 23, 2.1);
+    crearAnimacion(this, 'player', 'idleLeft', 24, 27, 2.1);
+    crearAnimacion(this, 'player', 'idleRight', 28, 31, 2.1);
 
     this.physics.world.enable(this.player);
     this.player.setCollideWorldBounds(true);
   }
 
   update() {
-    const cursors = this.input.keyboard.createCursorKeys();
 
     this.player.setVelocity(0);
 
-    // Evaluación de los distinos casos en los que se precionan los botones de movimiento
+    // Evaluación de los distinos casos en los que se precionan los botones de movimiento (Flechas del teclado)
     switch (true) {
-      case cursors.up.isDown && cursors.left.isDown: // Teclas arriba e izquierda
+      // Teclas arriba e izquierda  ||  Teclas W  A
+      case (cursors.flechas.up.isDown && cursors.flechas.left.isDown) || (cursors.letras.W.isDown && cursors.letras.A.isDown):
         animacionIdle = 'idleBack'
         manejadorMovimientoJugador(this.player, -diagonalVelocity, -diagonalVelocity, 'walkUp');
         break;
 
-      case cursors.up.isDown && cursors.right.isDown: // Teclas arriba y derecha
+      // Teclas arriba y derecha    ||  Teclas W  D
+      case (cursors.flechas.up.isDown && cursors.flechas.right.isDown) || (cursors.letras.W.isDown && cursors.letras.D.isDown):
         animacionIdle = 'idleBack'
         manejadorMovimientoJugador(this.player, diagonalVelocity, -diagonalVelocity, 'walkUp');
         break;
 
-      case cursors.down.isDown && cursors.left.isDown: // Teclas abajo e izquierda
+      // Teclas abajo e izquierda   ||  Teclas S  A
+      case (cursors.flechas.down.isDown && cursors.flechas.left.isDown) || (cursors.letras.S.isDown && cursors.letras.A.isDown):
         animacionIdle = 'idleFront'
         manejadorMovimientoJugador(this.player, -diagonalVelocity, diagonalVelocity, 'walkDown');
         break;
 
-      case cursors.down.isDown && cursors.right.isDown: // Teclas abajo y derecha
+      // Teclas abajo y derecha    ||  Teclas S  D
+      case (cursors.flechas.down.isDown && cursors.flechas.right.isDown) || (cursors.letras.S.isDown && cursors.letras.D.isDown):
         animacionIdle = 'idleFront'
         manejadorMovimientoJugador(this.player, diagonalVelocity, diagonalVelocity, 'walkDown');
         break;
 
-      case cursors.right.isDown: // Tecla derecha
+      // Tecla derecha    ||  Tecla D
+      case cursors.flechas.right.isDown || cursors.letras.D.isDown:
         animacionIdle = 'idleRight'
         manejadorMovimientoJugador(this.player, v_m_personaje, 0, 'walkRight');
         break;
 
-      case cursors.left.isDown: // Tecla izquierda
+      // Tecla izquierda  ||  Tecla A
+      case cursors.flechas.left.isDown || cursors.letras.A.isDown:
         animacionIdle = 'idleLeft'
         manejadorMovimientoJugador(this.player, -v_m_personaje, 0, 'walkLeft');
         break;
 
-      case cursors.down.isDown: // Tecla abajo
+      // Tecla abajo      ||  Tecla S
+      case cursors.flechas.down.isDown || cursors.letras.S.isDown:
         animacionIdle = 'idleFront'
         manejadorMovimientoJugador(this.player, 0, v_m_personaje, 'walkDown');
         break;
 
-      case cursors.up.isDown: // Tecla arriba
+      // Tecla arriba     ||  Tecla W
+      case cursors.flechas.up.isDown || cursors.letras.W.isDown:
         animacionIdle = 'idleBack'
         manejadorMovimientoJugador(this.player, 0, -v_m_personaje, 'walkUp');
         break;
