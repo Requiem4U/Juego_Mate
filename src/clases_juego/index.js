@@ -6,8 +6,8 @@ window.onload = ()=>{
 
   const config = {
     type: Phaser.AUTO,
-    width: '100vw',
-    height: '100vh',
+    width: '100%',
+    height: '100%',
     parent: 'contenedor_juego',
     scene: [Game],
     physics: {
@@ -22,7 +22,6 @@ window.onload = ()=>{
   let game = new Phaser.Game(config);
 
   function resizeGame() {
-    console.log(gameContainer)
     const newWidth = gameContainer.clientWidth;
     const newHeight = gameContainer.clientHeight;
 

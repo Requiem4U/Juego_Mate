@@ -1,6 +1,7 @@
 .contenedorJuego, canvas {
     width: 100%;
     height: 100vh;
+    overflow: hidden;
 }
 
 @media (max-width: 720px) or (max-height: 480px) {

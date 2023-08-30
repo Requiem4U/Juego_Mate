@@ -1,6 +1,8 @@
 import Phaser from "phaser";
-import backgroundImg from '../imagenes/fondo1.jpg'
+import backgroundImg from '../imagenes/Fondo_Seleccionar_Personaje.jpg'
 import spritesheetP from '../imagenes/Mujer_Style_Sheets_128x128.png'
+import idleP from '../imagenes/Mujer_Style_Sheet_Idle.png'
+import spritesheetP_2 from '../imagenes/Hombre_Style_Sheets_128x128.png'
 
 const v_m_personaje = 160
 
@@ -17,17 +19,25 @@ export class Game extends Phaser.Scene {
   }
 
   preload() {
-    this.load.spritesheet('player', spritesheetP, { frameWidth: 128, frameHeight: 128 })
+    this.load.spritesheet('player', spritesheetP_2, { frameWidth: 128, frameHeight: 128 })
+    this.load.spritesheet('idle_P', idleP, { frameWidth: 256, frameHeight: 256 })
+
+    this.load.image('background', backgroundImg)
   }
 
   create() {
     cursors.flechas = this.input.keyboard.createCursorKeys();
     cursors.letras = this.input.keyboard.addKeys('W,A,S,D');
-
-    const gameContainer = document.getElementById('contenedor_juego');
-
-    this.player = this.physics.add.sprite(this.game.canvas.width / 2, this.game.canvas.height / 2, 'player')
-
+    
+    
+    let posicion = { x: this.game.canvas.width / 2, y: this.game.canvas.height / 2}
+    
+    this.add.image(posicion.x, posicion.y, 'background').setDepth(-1)
+    this.idle = this.physics.add.sprite(posicion.x*0.6, posicion.y*0.8, 'idle_P').setImmovable()
+    this.player = this.physics.add.sprite(posicion.x, posicion.y, 'player')
+    
+    crearAnimacion(this, 'idle_P', 'idle_P', 0, 3, 2.1)
+    
     // Ceación de animaciones de caminata
     crearAnimacion(this, 'player', 'walkDown', 0, 3);
     crearAnimacion(this, 'player', 'walkUp', 4, 7);
@@ -38,11 +48,24 @@ export class Game extends Phaser.Scene {
     crearAnimacion(this, 'player', 'idleBack', 20, 23, 2.1);
     crearAnimacion(this, 'player', 'idleLeft', 24, 27, 2.1);
     crearAnimacion(this, 'player', 'idleRight', 28, 31, 2.1);
-
+    
     this.physics.world.enable(this.player);
     this.player.setCollideWorldBounds(true);
-  }
 
+    let idleSize = {width: this.idle.width, height: this.idle.height}
+    let playerSize = {width: this.player.width, height: this.player.height}
+    
+    this.player.setSize(playerSize.width*0.34375, playerSize.height*0.65625)
+    this.player.setOffset(playerSize.width*0.328125, playerSize.height*0.171875)
+    
+    this.idle.setSize(idleSize.width*0.65625, idleSize.height*0.765625)
+    this.idle.setOffset(idleSize.width*0.171875, idleSize.height*0.1171875)
+
+    this.physics.add.collider(this.player, this.idle, manejarColision, (player, obj) => {if((player.y - obj.y)<=0){return false}} , this)
+
+    this.idle.anims.play('idle_P')
+  }
+  
   update() {
 
     this.player.setVelocity(0);
@@ -101,6 +124,14 @@ export class Game extends Phaser.Scene {
         manejadorAnimacionIdle(this.player, animacionIdle)
     }
 
+    if(this.player.y > this.idle.y){
+      this.player.setDepth(1)
+      this.idle.setDepth(0)
+    }else{
+      this.player.setDepth(0)
+      this.idle.setDepth(1)
+    }
+
   }
 }
 
@@ -121,4 +152,8 @@ function manejadorMovimientoJugador(player, velocityX, velocityY, animationKey) 
 
 function manejadorAnimacionIdle(player, animacionIdle) {
   player.anims.play(animacionIdle, true)
+}
+
+function manejarColision(player, obj) {
+  console.log(player.y - obj.y)
 }
