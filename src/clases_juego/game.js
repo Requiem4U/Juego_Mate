@@ -1,8 +1,8 @@
 import Phaser from "phaser";
-import backgroundImg from '../imagenes/Fondo_Seleccionar_Personaje.jpg'
-import spritesheetP from '../imagenes/Mujer_Style_Sheets_128x128.png'
-import idleP from '../imagenes/Mujer_Style_Sheet_Idle.png'
-import spritesheetP_2 from '../imagenes/Hombre_Style_Sheets_128x128.png'
+import backgroundImg from '../imagenes/Fondos/Fondo_Seleccionar_Personaje.jpg'
+import spritesheetP from '../imagenes/Personajes/Mujer_Style_Sheets_128x128.png'
+import idleP from '../imagenes/Personajes/Mujer_Style_Sheet_Idle.png'
+import spritesheetP_2 from '../imagenes/Personajes/Hombre_Style_Sheets_128x128.png'
 
 const v_m_personaje = 160
 
