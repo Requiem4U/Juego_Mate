@@ -1,4 +1,5 @@
 import Phaser from "phaser";
+import { crearAnimacion } from "./manejador_animaciones";
 import backgroundImg from '../imagenes/Fondos/Fondo_Seleccionar_Personaje.jpg'
 import spritesheetP from '../imagenes/Personajes/Mujer_Style_Sheets_128x128.png'
 import idleP from '../imagenes/Personajes/Mujer_Style_Sheet_Idle.png'
@@ -10,7 +11,7 @@ const v_m_personaje = 160
 const diagonalVelocity = v_m_personaje * Math.sqrt(0.5);
 // Animacion Idle por defecto
 let animacionIdle = 'idleFront'
-let cursors = {flechas: null, letras: null}
+let cursors = {flechas: undefined, letras: undefined}
 
 export class Game extends Phaser.Scene {
 
@@ -55,13 +56,13 @@ export class Game extends Phaser.Scene {
     let idleSize = {width: this.idle.width, height: this.idle.height}
     let playerSize = {width: this.player.width, height: this.player.height}
     
-    this.player.setSize(playerSize.width*0.34375, playerSize.height*0.65625)
-    this.player.setOffset(playerSize.width*0.328125, playerSize.height*0.171875)
+    this.player.setSize(playerSize.width*0.28125, playerSize.height*0.1875)
+    this.player.setOffset(playerSize.width*0.375, playerSize.height*0.578125)
     
-    this.idle.setSize(idleSize.width*0.65625, idleSize.height*0.765625)
-    this.idle.setOffset(idleSize.width*0.171875, idleSize.height*0.1171875)
+    this.idle.setSize(idleSize.width*0.28125, idleSize.height*0.1875)
+    this.idle.setOffset(idleSize.width*0.375, idleSize.height*0.578125)
 
-    this.physics.add.collider(this.player, this.idle, manejarColision, (player, obj) => {if((player.y - obj.y)<=0){return false}} , this)
+    this.physics.add.collider(this.player, this.idle, manejarColision, null , this)
 
     this.idle.anims.play('idle_P')
   }
@@ -133,15 +134,6 @@ export class Game extends Phaser.Scene {
     }
 
   }
-}
-
-function crearAnimacion(scene, player, key, startFrame, endFrame, frame_rate = 8) {
-  scene.anims.create({
-    key: key,
-    frames: scene.anims.generateFrameNumbers(player, { start: startFrame, end: endFrame }),
-    frameRate: frame_rate,
-    repeat: -1
-  });
 }
 
 function manejadorMovimientoJugador(player, velocityX, velocityY, animationKey) {

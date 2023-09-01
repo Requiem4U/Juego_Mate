@@ -1,15 +1,19 @@
 import { Game } from './game.js';
+import { Escena_Seleccion_Personaje } from './seleccion_personaje/seleccion_personaje.js';
+import { Escena_Confirmacion_Seleccion_Personaje } from './seleccion_personaje/confirmacion_seleccion_personaje.js';
 
 window.onload = ()=>{
 
-  let gameContainer = document.getElementById('contenedor_juego');
-
   const config = {
     type: Phaser.AUTO,
-    width: '100%',
-    height: '100%',
+    width: 1536,
+    height: 792,
+    scale:{
+      mode: Phaser.Scale.FIT,
+      autoCenter: Phaser.Scale.CENTER_BOTH
+    },
     parent: 'contenedor_juego',
-    scene: [Game],
+    scene: [Escena_Seleccion_Personaje,Escena_Confirmacion_Seleccion_Personaje],
     physics: {
       default: 'arcade',
       arcade: {
@@ -20,15 +24,4 @@ window.onload = ()=>{
   }
 
   let game = new Phaser.Game(config);
-
-  function resizeGame() {
-    const newWidth = gameContainer.clientWidth;
-    const newHeight = gameContainer.clientHeight;
-
-    game.renderer.resize(newWidth, newHeight);
-  }
-
-  window.addEventListener('resize', resizeGame);
-
-  resizeGame
 }

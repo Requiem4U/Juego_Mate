@@ -1,5 +1,4 @@
 @font-face {
     font-family: 'Pixel Operator';
-    src:  url("../fuentes/pixeloperator-webfont.woff")format("woff")
+    src: local('Pixel Operator') url("../fuentes/pixeloperator-webfont.woff") format("woff")
 }
-
