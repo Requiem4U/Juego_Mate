@@ -1,5 +1,5 @@
 import Phaser from "phaser";
-import { crearAnimacion } from "./manejador_animaciones";
+import { crearAnimacion } from "./manejadores/manejador_animaciones";
 import backgroundImg from '../imagenes/Fondos/Fondo_Seleccionar_Personaje.jpg'
 import spritesheetP from '../imagenes/Personajes/Mujer_Style_Sheets_128x128.png'
 import idleP from '../imagenes/Personajes/Mujer_Style_Sheet_Idle.png'

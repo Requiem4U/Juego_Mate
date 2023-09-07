@@ -1,6 +1,7 @@
 import { Game } from './game.js';
 import { Escena_Seleccion_Personaje } from './seleccion_personaje/seleccion_personaje.js';
 import { Escena_Confirmacion_Seleccion_Personaje } from './seleccion_personaje/confirmacion_seleccion_personaje.js';
+import { Escena_Vendedor_Pantalla_Principal } from './vendedor/pantalla_principal_vendedor.js';
 
 window.onload = ()=>{
 
@@ -13,7 +14,7 @@ window.onload = ()=>{
       autoCenter: Phaser.Scale.CENTER_BOTH
     },
     parent: 'contenedor_juego',
-    scene: [Escena_Seleccion_Personaje,Escena_Confirmacion_Seleccion_Personaje],
+    scene: [Escena_Seleccion_Personaje, Escena_Confirmacion_Seleccion_Personaje, Escena_Vendedor_Pantalla_Principal],
     physics: {
       default: 'arcade',
       arcade: {

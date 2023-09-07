@@ -1,10 +1,7 @@
 // Importaciones de funciones y datos escenciales
 import Phaser from "phaser";
-import { crearAnimacion } from "../manejador_animaciones";
-
-// Importaciones de fondos, iconos y banners
-import backgroundImg from '../../imagenes/Fondos/Fondo_Seleccionar_Personaje.jpg'
-import banner_Seleccion from '../../imagenes/Banners/Banner_General_Textos.png'
+import { crearAnimacion } from "../manejadores/manejador_animaciones";
+import { ManejadorParpadeoLinea } from "../manejadores/manejador_timers_eventos";
 
 // Cursores de selección
 let cursors = {
@@ -20,14 +17,18 @@ let bounds = { aceptar: undefined, cancelar: undefined }
 let underline = { aceptar: undefined, cancelar: undefined }
 
 //Texto Confirmacion
-let textoConfimacion = { aceptar: undefined, cancelar: undefined}
+let textoConfimacion = { aceptar: undefined, cancelar: undefined }
 
 let velocidadAnimacion = 6
 let contenido = '¿Estás seguro de tu elección? (Usa F para confirmar)'
 // Estilo de texto
 let style = undefined
 // Variable confirmacion
-let confirmado = true
+let confirmado = undefined
+
+
+let lineaSelec = undefined
+let configTimer =   undefined
 
 export class Escena_Confirmacion_Seleccion_Personaje extends Phaser.Scene {
 
@@ -35,17 +36,14 @@ export class Escena_Confirmacion_Seleccion_Personaje extends Phaser.Scene {
         super({ key: 'confirmacion_seleccion_personaje' })
     }
 
-    init(data){
-        if (data){
+    init(data) {
+        if (data) {
             personaje = data.personaje
+            confirmado = true
         }
     }
-    
-    preload() {
-        // Carga de fondos, iconos y banners
-        this.load.image('background', backgroundImg)
-        this.load.image('banner_seleccion', banner_Seleccion)
 
+    preload() {
     }
 
     create() {
@@ -56,32 +54,32 @@ export class Escena_Confirmacion_Seleccion_Personaje extends Phaser.Scene {
 
         let posicion = { x: this.game.canvas.width, y: this.game.canvas.height }
 
-        this.add.image(posicion.x / 2, posicion.y / 2, 'background').setScale(0.8, 1).setDepth(-1)
-        this.add.image(posicion.x / 2, posicion.y * 0.8, 'banner_seleccion').setScale(0.8, 1)
+        this.add.image(posicion.x / 2, posicion.y / 2, 'background_seleccion_personaje').setScale(0.8, 1).setDepth(-1)
+        this.add.image(posicion.x / 2, posicion.y * 0.8, 'banner_texto_general').setScale(0.8, 1)
 
-        this.caminata_Frente_P = this.add.sprite(posicion.x * 0.2, posicion.y * 0.4, 'caminata_Frente_'+personaje)
-        this.caminata_Der_P = this.add.sprite(posicion.x * 0.4, posicion.y * 0.4, 'caminata_Der_'+personaje)
-        this.caminata_Espalda_P = this.add.sprite(posicion.x * 0.6, posicion.y * 0.4, 'caminata_Espalda_'+personaje)
-        this.caminata_Izq_P = this.add.sprite(posicion.x * 0.8, posicion.y * 0.4, 'caminata_Izq_'+personaje)
-        
-        // Se comprueba si ya existe la animación para no crarla de nuevo
-        if(!this.anims.exists('caminata_Frente_'+personaje)){
-            crearAnimacion(this, 'caminata_Frente_'+personaje, 'caminata_Frente_'+personaje, 0, 3, velocidadAnimacion)
+        this.caminata_Frente_P = this.add.sprite(posicion.x * 0.2, posicion.y * 0.4, 'caminata_Frente_' + personaje)
+        this.caminata_Der_P = this.add.sprite(posicion.x * 0.4, posicion.y * 0.4, 'caminata_Der_' + personaje)
+        this.caminata_Espalda_P = this.add.sprite(posicion.x * 0.6, posicion.y * 0.4, 'caminata_Espalda_' + personaje)
+        this.caminata_Izq_P = this.add.sprite(posicion.x * 0.8, posicion.y * 0.4, 'caminata_Izq_' + personaje)
+
+        // Se comprueba si ya existe la animación para no crearla de nuevo
+        if (!this.anims.exists('caminata_Frente_' + personaje)) {
+            crearAnimacion(this, 'caminata_Frente_' + personaje, 'caminata_Frente_' + personaje, 0, 3, velocidadAnimacion)
         }
-        if(!this.anims.exists('caminata_Der_'+personaje)){
-            crearAnimacion(this, 'caminata_Der_'+personaje, 'caminata_Der_'+personaje, 0, 3, velocidadAnimacion)
+        if (!this.anims.exists('caminata_Der_' + personaje)) {
+            crearAnimacion(this, 'caminata_Der_' + personaje, 'caminata_Der_' + personaje, 0, 3, velocidadAnimacion)
         }
-        if(!this.anims.exists('caminata_Espalda_'+personaje)){
-            crearAnimacion(this, 'caminata_Espalda_'+personaje, 'caminata_Espalda_'+personaje, 0, 3, velocidadAnimacion)
+        if (!this.anims.exists('caminata_Espalda_' + personaje)) {
+            crearAnimacion(this, 'caminata_Espalda_' + personaje, 'caminata_Espalda_' + personaje, 0, 3, velocidadAnimacion)
         }
-        if(!this.anims.exists('caminata_Izq_'+personaje)){
-            crearAnimacion(this, 'caminata_Izq_'+personaje, 'caminata_Izq_'+personaje, 0, 3, velocidadAnimacion)
+        if (!this.anims.exists('caminata_Izq_' + personaje)) {
+            crearAnimacion(this, 'caminata_Izq_' + personaje, 'caminata_Izq_' + personaje, 0, 3, velocidadAnimacion)
         }
 
-        this.caminata_Frente_P.play('caminata_Frente_'+personaje)
-        this.caminata_Der_P.play('caminata_Der_'+personaje)
-        this.caminata_Espalda_P.play('caminata_Espalda_'+personaje)
-        this.caminata_Izq_P.play('caminata_Izq_'+personaje)
+        this.caminata_Frente_P.play('caminata_Frente_' + personaje)
+        this.caminata_Der_P.play('caminata_Der_' + personaje)
+        this.caminata_Espalda_P.play('caminata_Espalda_' + personaje)
+        this.caminata_Izq_P.play('caminata_Izq_' + personaje)
 
         style = {
             fontFamily: 'Arial',
@@ -109,32 +107,48 @@ export class Escena_Confirmacion_Seleccion_Personaje extends Phaser.Scene {
         underline.cancelar.fillStyle(0xffffff, 1);
         underline.cancelar.fillRect(textoConfimacion.cancelar.x - bounds.cancelar.width / 2, textoConfimacion.cancelar.y + bounds.cancelar.height - 10, bounds.cancelar.width, 5)
         underline.cancelar.visible = false
+
+        // Linea de pcion sellecionada
+        lineaSelec = underline.aceptar
+        
+        this.manejadorParpade = new ManejadorParpadeoLinea(this, configTimer)
+        
+        // Configuracion del timmer
+        configTimer = {
+            delay: 700,
+            callback: () => { this.manejadorParpade.parpadeoLinea(lineaSelec) },
+            callbackScope: this,
+            loop: true
+        }
+        
+        this.timer = this.manejadorParpade.crearTimer()
     }
 
     update() {
         // Evaluación de los distinos casos en los que se precionan los botones de movimiento (Flechas del teclado)
-        switch (true) {
+        if (cursors.movimiento.flechas.right.isDown || cursors.movimiento.letras.D.isDown) {
             // Tecla derecha    ||  Tecla D
-            case cursors.movimiento.flechas.right.isDown || cursors.movimiento.letras.D.isDown:
-                underline.aceptar.visible = false
-                underline.cancelar.visible = true
-                confirmado = false
-                break;
-
+            underline.aceptar.visible = false
+            underline.cancelar.visible = true
+            confirmado = false
+            lineaSelec = underline.cancelar
+            this.manejadorParpade.reiniciar()
+        } else if (cursors.movimiento.flechas.left.isDown || cursors.movimiento.letras.A.isDown) {
             // Tecla izquierda  ||  Tecla A
-            case cursors.movimiento.flechas.left.isDown || cursors.movimiento.letras.A.isDown:
-                underline.aceptar.visible = true
-                underline.cancelar.visible = false
-                confirmado = true
-                break;
-
-            case cursors.acciones.confirmar.isDown:
-                if(!confirmado){
-                    this.scene.start('seleccion_personaje');
-                }
-                break;
-
-            default: // Ninguna tecla
+            underline.aceptar.visible = true
+            underline.cancelar.visible = false
+            confirmado = true
+            lineaSelec = underline.aceptar
+            this.manejadorParpade.reiniciar()
+        } else if (cursors.acciones.confirmar.isDown) {
+            // Tecla confirmacion
+            if (!confirmado) {
+                this.timer.remove()
+                this.scene.start('seleccion_personaje');
+            } else{
+                this.timer.remove()
+                this.scene.start('vendedor_pantalla_principal')
+            }
         }
 
     }

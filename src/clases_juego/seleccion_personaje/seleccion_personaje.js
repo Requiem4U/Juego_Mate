@@ -1,6 +1,7 @@
 // Importaciones de funciones y datos escenciales
 import Phaser from "phaser";
-import { crearAnimacion } from "../manejador_animaciones";
+import { crearAnimacion } from "../manejadores/manejador_animaciones";
+import { ManejadorParpadeoLinea } from "../manejadores/manejador_timers_eventos";
 
 // Importaciones de fondos, iconos y banners
 import backgroundImg from '../../imagenes/Fondos/Fondo_Seleccionar_Personaje.jpg'
@@ -38,6 +39,9 @@ let personajeSeleccionado = 'Mujer'
 // Estilo de texto
 let style = undefined
 
+let lineaSelec = undefined
+let configTimer =   undefined
+
 let contenido = 'Escoge tu personaje... (Usa A y D para seleccionar. Usa F para confirmar)'
 
 export class Escena_Seleccion_Personaje extends Phaser.Scene {
@@ -46,13 +50,13 @@ export class Escena_Seleccion_Personaje extends Phaser.Scene {
         super({ key: 'seleccion_personaje' })
     }
 
-    init(){
+    init() {
         personajeSeleccionado = 'Mujer'
     }
     preload() {
         // Carga de fondos, iconos y banners
-        this.load.image('background', backgroundImg)
-        this.load.image('banner_seleccion', banner_Seleccion)
+        this.load.image('background_seleccion_personaje', backgroundImg)
+        this.load.image('banner_texto_general', banner_Seleccion)
 
         // Carga de Sprites
         this.load.spritesheet('idle_Mujer', sprite_Idle_Mujer, { frameWidth: 256, frameHeight: 256 })
@@ -78,29 +82,23 @@ export class Escena_Seleccion_Personaje extends Phaser.Scene {
 
         let posicion = { x: this.game.canvas.width, y: this.game.canvas.height }
 
-        this.add.image(posicion.x / 2, posicion.y / 2, 'background').setScale(0.8, 1).setDepth(-1)
-        this.add.image(posicion.x / 2, posicion.y * 0.8, 'banner_seleccion').setScale(0.8, 1)
+        this.add.image(posicion.x / 2, posicion.y / 2, 'background_seleccion_personaje').setScale(0.8, 1).setDepth(-1)
+        this.add.image(posicion.x / 2, posicion.y * 0.8, 'banner_texto_general').setScale(0.8, 1)
 
         this.idle_Mujer = this.add.sprite(posicion.x * 0.32, posicion.y * 0.4, 'idle_Mujer')
         this.idle_Hombre = this.add.sprite(posicion.x * 0.66, posicion.y * 0.4, 'idle_Hombre')
 
         // Animacion Idle
-        // Se comprueba si ya existe la animación para no crarla de nuevo
-        if(!this.anims.exists('idle_Mujer')){
-            crearAnimacion(this, 'idle_Mujer', 'idle_Mujer', 0, 3, 2.1)
+        // Se comprueba si ya existe la animación para no crearla de nuevo
+        if (!this.anims.exists('idle_Mujer')) {
+            crearAnimacion(this, 'idle_Mujer', 'idle_Mujer', 0, 3, 1.25)
         }
-        if(!this.anims.exists('idle_Hombre')){
-            crearAnimacion(this, 'idle_Hombre', 'idle_Hombre', 0, 3, 2.1)
+        if (!this.anims.exists('idle_Hombre')) {
+            crearAnimacion(this, 'idle_Hombre', 'idle_Hombre', 0, 3, 1.3)
         }
 
         this.idle_Mujer.anims.play('idle_Mujer')
         this.idle_Hombre.anims.play('idle_Hombre')
-
-        this.add.text(posicion.x * 0.1, posicion.y * 0.71, contenido, {
-            fontFamily: 'Arial',
-            fontSize: 35,
-            fill: 'white',
-        }).setOrigin(0)
 
         style = {
             fontFamily: 'Arial',
@@ -108,6 +106,8 @@ export class Escena_Seleccion_Personaje extends Phaser.Scene {
             fill: 'white',
             align: 'center'
         }
+
+        this.add.text(posicion.x * 0.1, posicion.y * 0.71, contenido, style).setOrigin(0)
 
         personajes.mujer = this.add.text(posicion.x * 0.3, posicion.y * 0.84, 'Mujer', style)
         personajes.mujer.setOrigin(0.5)
@@ -125,30 +125,42 @@ export class Escena_Seleccion_Personaje extends Phaser.Scene {
         underline.hombre.fillStyle(0xffffff, 1);
         underline.hombre.fillRect(personajes.hombre.x - bounds.hombre.width / 2, personajes.hombre.y + bounds.hombre.height - 10, bounds.hombre.width, 5)
         underline.hombre.visible = false
+        
+        // Linea de pcion sellecionada
+        lineaSelec = underline.mujer
+        
+        // Configuracion del timmer
+        configTimer = {
+            delay: 700,
+            callback: () => { this.manejadorParpade.parpadeoLinea(lineaSelec) },
+            callbackScope: this,
+            loop: true
+        }
+        
+        this.manejadorParpade = new ManejadorParpadeoLinea(this, configTimer)
+        this.timer = this.manejadorParpade.crearTimer()
     }
 
     update() {
         // Evaluación de los distinos casos en los que se precionan los botones de movimiento (Flechas del teclado)
-        switch (true) {
+        if (cursors.movimiento.flechas.right.isDown || cursors.movimiento.letras.D.isDown) {
             // Tecla derecha    ||  Tecla D
-            case cursors.movimiento.flechas.right.isDown || cursors.movimiento.letras.D.isDown:
-                underline.mujer.visible = false
+            underline.mujer.visible = false
                 underline.hombre.visible = true
                 personajeSeleccionado = 'Hombre'
-                break;
-
+                lineaSelec = underline.hombre
+                this.manejadorParpade.reiniciar()
+        } else if (cursors.movimiento.flechas.left.isDown || cursors.movimiento.letras.A.isDown) {
             // Tecla izquierda  ||  Tecla A
-            case cursors.movimiento.flechas.left.isDown || cursors.movimiento.letras.A.isDown:
-                underline.mujer.visible = true
+            underline.mujer.visible = true
                 underline.hombre.visible = false
                 personajeSeleccionado = 'Mujer'
-                break;
-
-            case cursors.acciones.confirmar.isDown:
-                this.scene.start('confirmacion_seleccion_personaje', {personaje: personajeSeleccionado});
-                break;
-
-            default: // Ninguna tecla
+                lineaSelec = underline.mujer
+                this.manejadorParpade.reiniciar()
+        } else if (cursors.acciones.confirmar.isDown) {
+            this.timer.remove()
+            // Tecla confirmacion
+            this.scene.start('confirmacion_seleccion_personaje', { personaje: personajeSeleccionado });
         }
     }
 }
