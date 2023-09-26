@@ -82,7 +82,7 @@ export class Escena_Seleccion_Personaje extends Phaser.Scene {
 
         let posicion = { x: this.game.canvas.width, y: this.game.canvas.height }
 
-        this.add.image(posicion.x / 2, posicion.y / 2, 'background_seleccion_personaje').setScale(0.8, 1).setDepth(-1)
+        this.add.image(posicion.x / 2, posicion.y / 2, 'background_seleccion_personaje').setScale(0.8).setDepth(-1)
         this.add.image(posicion.x / 2, posicion.y * 0.8, 'banner_texto_general').setScale(0.8, 1)
 
         this.idle_Mujer = this.add.sprite(posicion.x * 0.32, posicion.y * 0.4, 'idle_Mujer')

@@ -24,12 +24,12 @@ let underline = [undefined, undefined, undefined]
 //Texto Confirmacion
 let textoOpciones = [undefined, undefined, undefined]
 let listadoOpciones = ['Comprar', 'Preguntas', 'Cancelar']
-let opcionSeleccionada = 0
+let opcionSeleccionada = undefined
 
 // Estilo de texto
 let style = undefined
 
-let configTimer = {parpadeo: undefined, animacion: {vendedor: undefined, canasta: undefined}}
+let configTimer = { parpadeo: undefined, animacion: { vendedor: undefined, canasta: undefined } }
 let lineaSelec = undefined
 
 export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
@@ -66,7 +66,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
 
 
         if (!this.anims.exists('idle_vendedro_pp')) {
-            crearAnimacion(this, 'vendedor_pp', 'idle_vendedro_pp', 0, 8, 4, 0)
+            crearAnimacion(this, 'vendedor_pp', 'idle_vendedro_pp', 0, 8, 7, 0)
         }
 
         if (!this.anims.exists('idle_canasta')) {
@@ -116,7 +116,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
         underline[2].fillRect(textoOpciones[2].x - bounds.cancelar.width / 2, textoOpciones[2].y + bounds.cancelar.height - 10, bounds.cancelar.width, 5)
         underline[2].setDepth(2)
         underline[2].visible = false
-        
+
         // Configuracion del timmer linea parpadeante
         configTimer.parpadeo = {
             delay: 700,
@@ -141,7 +141,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
 
         // Configuracion de timer vendedor
         configTimer.animacion.canasta = {
-            delay: 3000,
+            delay: 3150,
             callback: () => { this.ojos_gato.anims.play('ojos_gato') },
             callbackScope: this,
             loop: true
@@ -149,8 +149,11 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
 
         this.timer = repeticionAnimacion(this, configTimer.animacion.canasta)
 
+        opcionSeleccionada = 0
+
         this.timer = this.time.addEvent({
             delay: 150,
+            startAt: 150,
             callback: () => { this.seleccion() },
             callbackScope: this,
             loop: true
@@ -160,6 +163,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
 
     seleccion() {
         switch (true) {
+            // Selección Opciones Hacia Arriba
             case cursors.movimiento.flechas.up.isDown || cursors.movimiento.letras.W.isDown:
                 if (opcionSeleccionada == 0) {
                     underline[opcionSeleccionada].visible = false
@@ -174,6 +178,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
                     this.manejadorParpadeo.reiniciar()
                 }
                 break
+                // Selección Opciones Hacia Arriba
             case cursors.movimiento.flechas.down.isDown || cursors.movimiento.letras.S.isDown:
                 if (opcionSeleccionada == 2) {
                     underline[opcionSeleccionada].visible = false
@@ -188,8 +193,18 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
                     this.manejadorParpadeo.reiniciar()
                 }
                 break
+                // Opción Comprar Items
+            case cursors.acciones.confirmar.isDown && opcionSeleccionada == 0:
+                console.log(0)
+                break
+                // Opción Preguntas
+            case cursors.acciones.confirmar.isDown && opcionSeleccionada == 1:
+                console.log(1)
+                break
+                // Opción Cancelar
             case cursors.acciones.confirmar.isDown && opcionSeleccionada == 2:
                 this.timer.remove()
+                //this.scene.start('game')
                 this.scene.start('seleccion_personaje')
                 break
         }

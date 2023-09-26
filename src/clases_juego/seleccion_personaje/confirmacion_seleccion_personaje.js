@@ -54,7 +54,7 @@ export class Escena_Confirmacion_Seleccion_Personaje extends Phaser.Scene {
 
         let posicion = { x: this.game.canvas.width, y: this.game.canvas.height }
 
-        this.add.image(posicion.x / 2, posicion.y / 2, 'background_seleccion_personaje').setScale(0.8, 1).setDepth(-1)
+        this.add.image(posicion.x / 2, posicion.y / 2, 'background_seleccion_personaje').setScale(0.8).setDepth(-1)
         this.add.image(posicion.x / 2, posicion.y * 0.8, 'banner_texto_general').setScale(0.8, 1)
 
         this.caminata_Frente_P = this.add.sprite(posicion.x * 0.2, posicion.y * 0.4, 'caminata_Frente_' + personaje)
@@ -147,7 +147,7 @@ export class Escena_Confirmacion_Seleccion_Personaje extends Phaser.Scene {
                 this.scene.start('seleccion_personaje');
             } else{
                 this.timer.remove()
-                this.scene.start('vendedor_pantalla_principal')
+                this.scene.start('interior_caja_juan')
             }
         }
 
