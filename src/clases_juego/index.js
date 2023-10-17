@@ -5,6 +5,7 @@ import { Escena_Vendedor_Pantalla_Principal } from './vendedor/pantalla_principa
 import { Interior_Casa_Juan } from './historia/casa_juan_interior.js';
 import { Exterior_Casa_Juan } from './historia/casa_juan_exterior.js';
 import { Pantalla_Inicio } from './pantalla_inicio_juego.js';
+import { Mapa_Parte_1 } from './historia/mapa_parte_1.js';
 
 window.onload = ()=>{
 
@@ -18,12 +19,12 @@ window.onload = ()=>{
     },
     parent: 'contenedor_juego',
     scene: [Pantalla_Inicio,Escena_Seleccion_Personaje, Escena_Confirmacion_Seleccion_Personaje, Interior_Casa_Juan, Escena_Vendedor_Pantalla_Principal, 
-          Exterior_Casa_Juan],
+          Exterior_Casa_Juan, Mapa_Parte_1],
     physics: {
       default: 'arcade',
       arcade: {
         gravity: { y: 0 },
-        debug: true
+        debug: false
       }
     }
   }

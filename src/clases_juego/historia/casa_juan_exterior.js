@@ -19,10 +19,17 @@ let cursors = {
 }
 
 let colisionCasa = []
+let entrada_a_escena = ''
 
 export class Exterior_Casa_Juan extends Phaser.Scene {
     constructor() {
         super({ key: 'exterior_casa_juan' })
+    }
+
+    init(data){
+        if(data){
+            entrada_a_escena = data.entrada
+        }
     }
 
     preload() {
@@ -142,7 +149,11 @@ export class Exterior_Casa_Juan extends Phaser.Scene {
         this.cubeta = this.physics.add.image(posicion.x * 1.88, posicion.y * 1.12, 'cubeta_1').setScale(0.65).setImmovable(true)
         this.pozo = this.physics.add.image(posicion.x * 1.8, posicion.y * 1.18, 'pozo_1').setScale(0.8).setImmovable(true)
         
-        this.player = this.physics.add.sprite(posicion.x * 0.985, posicion.y * 1.35, 'juan_c').setScale(1.25)
+        if(entrada_a_escena === 'casa'){
+            this.player = this.physics.add.sprite(posicion.x * 0.985, posicion.y * 1.35, 'juan_c').setScale(1.25)
+        }else{
+            this.player = this.physics.add.sprite(posicion.x * 0.985, posicion.y * 1.85, 'juan_c').setScale(1.25)
+        }
         this.player.setCollideWorldBounds(true);
         
         let playerSize = { width: this.player.width, height: this.player.height }
@@ -162,7 +173,9 @@ export class Exterior_Casa_Juan extends Phaser.Scene {
             this.scene.start('interior_caja_juan', {entradaPuerta: true})
         }, null, this)
 
-        this.physics.add.collider(this.player, this.salidaEscena, ()=>{}, null, this)
+        this.physics.add.collider(this.player, this.salidaEscena, ()=>{
+            this.scene.start('mape_parte_1', {entrada: 'norte'})
+        }, null, this)
     }
 
     update() {
