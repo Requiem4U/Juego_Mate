@@ -9,6 +9,10 @@ canvas {
 }
 
 @media (max-width: 720px) or (max-height: 480px) {
+    body{
+        margin-top: 50vh;
+        transform: translate(0%, -50%);
+    }
     .contenedorJuego , canvas{
         margin: 0;
         padding: 0;
