@@ -1,13 +1,11 @@
 import Phaser from "phaser";
 import { crearAnimacion } from "./manejadores/manejador_animaciones";
-import backgroundImg from '../imagenes/Fondos/Fondo_Seleccionar_Personaje.jpg'
-import spritesheetP from '../imagenes/Personajes/Mujer_Style_Sheets_128x128.png'
 import idleP from '../imagenes/Personajes/Mujer_Style_Sheet_Idle.png'
-import spritesheetP_2 from '../imagenes/Personajes/Hombre_Style_Sheets_128x128.png'
 import sprite_vendedor from '../imagenes/Personajes/Vendedor_Style_Sheet_128x128.png'
 import spriteDialogo from '../imagenes/Personajes/GloboDialogo.png'
-
 import arbol_1 from "../imagenes/Objetos/Decoracion/Arbol_1.png"
+import backgroundImg from '../imagenes/Fondos/Fondo_Seleccionar_Personaje.jpg'
+import spritesheetP_2 from '../imagenes/Personajes/Hombre_Style_Sheets_128x128.png'
 
 const v_m_personaje = 160
 
@@ -17,17 +15,17 @@ const diagonalVelocity = v_m_personaje * Math.sqrt(0.5);
 let animacionIdle = 'idleFront'
 let cursors = { flechas: undefined, letras: undefined }
 
-export class Game extends Phaser.Scene {
+export class Juego extends Phaser.Scene {
 
   constructor() {
     super({ key: 'game' });
   }
 
   preload() {
-    this.load.spritesheet('player', spritesheetP_2, { frameWidth: 128, frameHeight: 128 })
     this.load.spritesheet('idle_P', idleP, { frameWidth: 256, frameHeight: 256 })
     this.load.spritesheet('sprite_vendedor', sprite_vendedor, { frameWidth: 128, frameHeight: 128 })
     this.load.spritesheet('sprite_dialogo', spriteDialogo, { frameWidth: 128, frameHeight: 128 })
+    this.load.spritesheet('player', spritesheetP_2, { frameWidth: 128, frameHeight: 128 })
 
     this.load.image('background', backgroundImg)
     
@@ -35,6 +33,7 @@ export class Game extends Phaser.Scene {
   }
 
   create() {
+    
     cursors.flechas = this.input.keyboard.createCursorKeys();
     cursors.letras = this.input.keyboard.addKeys('W,A,S,D');
 
@@ -103,7 +102,7 @@ export class Game extends Phaser.Scene {
 
     this.g = false
 
-    this.isColision = this.physics.add.overlap(this.player, this.sprite_vendedor, (player, obj) => {
+    this.isColision = this.physics.add.overlap(this.player, this.sprite_vendedor, () => {
       this.g = true
     }, null, this)
 

@@ -168,8 +168,9 @@ export class Interior_Casa_Juan extends Phaser.Scene {
         this.timerTexto.paused = true
 
         this.indexTexto = 0
+        
         // Botón Arriba
-        cursors.movimiento.tactil.arriba = this.add.circle(200, 100, 50, 0x00ff01).setInteractive();
+        cursors.movimiento.tactil.arriba = this.add.circle(posicion.x*0.35, posicion.y*1.3, posicion.x*0.09, 0x00ff01).setInteractive();
         cursors.movimiento.tactil.arriba.on('pointerdown', () => {
             seMueve.arriba = true
         });
@@ -177,9 +178,8 @@ export class Interior_Casa_Juan extends Phaser.Scene {
             seMueve.arriba = false
         });
         
-
         // Botón Abajo
-        cursors.movimiento.tactil.abajo = this.add.circle(200, 300, 50, 0x00ff01).setInteractive();
+        cursors.movimiento.tactil.abajo = this.add.circle(posicion.x*0.35, posicion.y*1.8, posicion.x*0.09, 0x00ff01).setInteractive();
         cursors.movimiento.tactil.abajo.on('pointerdown', function () {
             seMueve.abajo = true
         });
@@ -188,7 +188,7 @@ export class Interior_Casa_Juan extends Phaser.Scene {
         });
 
         // Botón Izquierda
-        cursors.movimiento.tactil.izq = this.add.circle(100, 200, 50, 0x00ff00).setInteractive();
+        cursors.movimiento.tactil.izq = this.add.circle(posicion.x*0.2, posicion.y*1.55, posicion.x*0.09, 0x00ff00).setInteractive();
         cursors.movimiento.tactil.izq.on('pointerdown', function () {
             seMueve.izquierda = true
         });
@@ -197,7 +197,7 @@ export class Interior_Casa_Juan extends Phaser.Scene {
         });
 
         // Botón Derecha
-        cursors.movimiento.tactil.der = this.add.circle(300, 200, 50, 0x00ff00).setInteractive();
+        cursors.movimiento.tactil.der = this.add.circle(posicion.x*0.5, posicion.y*1.55, posicion.x*0.09, 0x00ff00).setInteractive();
         cursors.movimiento.tactil.der.on('pointerdown', function () {
             seMueve.derecha = true
         });
