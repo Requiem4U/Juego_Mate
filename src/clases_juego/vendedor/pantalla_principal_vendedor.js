@@ -1,14 +1,14 @@
 import Phaser from "phaser";
-import { crearAnimacion } from "../manejadores/manejador_animaciones";
+import { crearAnimacion } from "../manejadores/manejador_elementos_escena";
 // Importaciones de fondos, iconos y banners
-import backgroundImg from '../../imagenes/Fondos/Fondo_Seleccionar_Personaje.jpg'
-import banner_Seleccion from '../../imagenes/Banners/Banner_General_Textos.png'
-import banner_Contexto from '../../imagenes/Banners/Baner_Contextos_Vendedor.png'
+import backgroundImg from '../../assets/Fondos/Fondo_Seleccionar_Personaje.jpg'
+import banner_Seleccion from '../../assets/Banners/Banner_General_Textos.png'
+import banner_Contexto from '../../assets/Banners/Baner_Contextos_Vendedor.png'
 
 // Sheets
-import vendedor_principal from '../../imagenes/Personajes/Vendedor_PP_Style_Sheet.png'
-import canasta from '../../imagenes/Personajes/Cesta_Vendedor_Style_Sheet.png'
-import ojos_gato from '../../imagenes/Personajes/Ojos_Gato_Vendedor_Style_Sheet.png'
+import vendedor_principal from '../../assets/Personajes/Vendedor_PP_Style_Sheet.png'
+import canasta from '../../assets/Personajes/Cesta_Vendedor_Style_Sheet.png'
+import ojos_gato from '../../assets/Personajes/Ojos_Gato_Vendedor_Style_Sheet.png'
 import { ManejadorParpadeoLinea, repeticionAnimacion } from "../manejadores/manejador_timers_eventos";
 
 // Cursores de selección

@@ -1,6 +1,6 @@
 import React from 'react'
 import ReactDOM from 'react-dom/client'
-import Juego from './componentes/juego.jsx'
+import Juego from './juego.jsx'
 
 
 ReactDOM.createRoot(document.getElementById('root')).render(
