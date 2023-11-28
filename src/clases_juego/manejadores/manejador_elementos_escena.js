@@ -177,7 +177,10 @@ export function crearPersonaje (escena, sprite, puntoEntrada, {
 	esteX = anchoEscena * 0.965,
 	esteY = altoEscena * 0.5,
 	oesteX = anchoEscena * 0.035,
-	oesteY = altoEscena * 0.5, } = {}) {
+	oesteY = altoEscena * 0.5,
+	xPersonaje = anchoEscena / 2,
+	yPersonaje = altoEscena / 2
+} = {}) {
 
 	let personaje
 
@@ -194,9 +197,31 @@ export function crearPersonaje (escena, sprite, puntoEntrada, {
 		case 'izq':
 			personaje = escena.physics.add.sprite(oesteX, oesteY, sprite).setScale(escalaPersonaje)
 			break
+		default:
+			personaje = escena.physics.add.sprite(xPersonaje, yPersonaje, sprite).setScale(escalaPersonaje)
+			break
 	}
 
 	personaje.setCollideWorldBounds(true);
 
 	return personaje
+}
+
+export function crearAreaColision (escena, objeto, {
+	posicionX = objeto.x,
+	posicionY = objeto.y,
+	ancho = objeto.width,
+	alto = objeto.height,
+	color = 0x000000,
+	alfa = 0,
+	origenX = objeto.originX,
+	origenY = objeto.originY,
+	escalaX = objeto.scaleX,
+	escalaY = objeto.scaleY
+} = {}) {
+	let area = escena.add.rectangle(posicionX, posicionY, ancho, alto, color, alfa).setOrigin(origenX, origenY)
+	area.setScale(escalaX, escalaY)
+	escena.physics.world.enable(area)
+	area.body.immovable = true
+	return area
 }

@@ -80,8 +80,10 @@ export class Area_32_Interior extends Phaser.Scene {
 
         if (entradaPuerta) {
             player = this.physics.add.sprite(posicion.x * 1.015, posicion.y * 1.68, '_sprites_juan_cupul').setScale(1.25)
+            player.anims.play('idleFront_juan')
         } else {
             player = this.physics.add.sprite(posicion.x, posicion.y, '_sprites_juan_cupul').setScale(1.25)
+            player.anims.play('idleFront_juan')
         }
 
         ajustarAreaColision(player, {
@@ -147,39 +149,55 @@ export class Area_32_Interior extends Phaser.Scene {
         this.timerTexto.paused = true
 
         this.indexTexto = 0
+        this.dialogos = false
+        this.teclaPrecionada = false
 
+        this.timer2 = this.time.addEvent({})
 
     }
 
-    update () {
+    update (time, delta = 500) {
 
         player.setVelocity(0)
 
-        if (this.datosJg.ayudaControlesNPC_Disponible()) {
+        if (this.datosJg.ayudaControlesNPC_Disponible() && !this.dialogos) {
             this.Movimientos.movimientoPersonaje(player)
         }
 
+        cursors.acciones.confirmar.isDown ? this.teclaPrecionada = true : this.teclaPrecionada = false
 
-        if (cursors.acciones.confirmar.isDown) {
+        if (cursors.acciones.confirmar.isDown && this.teclaPrecionada) {
             if (this.finDialog) {
                 texto.text = ''
                 this.finDialog = false
                 this.timerTexto.paused = false
             }
             if (this.finTexto) {
+                this.dialogos = false
                 this.datosJg.actualzizarAyudaControlesNPC_Disponible()
-                this.timerTexto.destroy()
                 texto.destroy()
                 this.bannerTxt.destroy()
+                this.timer2 = this.time.delayedCall(800, () => {
+                    texto = undefined
+                    this.bannerTxt = undefined
+                    this.indexTexto = 0
+                    desplazamientoDialogo = 0
+                    this.finDialog = false
+                    this.dialogos = false
+                    this.finTexto = false
+                }, [], this)
             }
         }
 
-        if (cursors.acciones.confirmar.isDown && this.interaccionNoviaJuan) {
-            if (!this.bannerTxt) {
+        if (cursors.acciones.confirmar.isDown && this.interaccionNoviaJuan && this.teclaPrecionada) {
+            if (!this.bannerTxt && !this.finTexto) {
+                console.log(1)
+                this.dialogos = true
                 this.bannerTxt = this.add.image(posicion.x * 1.015, posicion.y * 1.75, '_banner_dialogos').setScale(0.8)
             }
 
-            if (!texto) {
+            if (!texto && !this.finTexto) {
+                console.log(2)
                 texto = this.add.text(this.bannerTxt.x, this.bannerTxt.y, '', {
                     fontFamily: 'Arial',
                     fontSize: 32,

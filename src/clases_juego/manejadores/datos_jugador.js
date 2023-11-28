@@ -1,6 +1,6 @@
 import datos from '../../datos.json'
 
-let ayudaControlesNPC = datos.entrada
+let ayudaControlesNPC = datos.ayudaControlesNPC
 
 export class Datos_Jugador {
 
@@ -11,6 +11,6 @@ export class Datos_Jugador {
     }
 
     actualzizarAyudaControlesNPC_Disponible () {
-        ayudaControlesNPC = !ayudaControlesNPC
+        ayudaControlesNPC = true
     }
 }

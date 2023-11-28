@@ -3,7 +3,7 @@ import { useEffect } from "react";
 import "./css/juego.css";
 
 export default function Juego() {
-	useEffect(() => {
+	/*useEffect(() => {
 		async function initPhaser() {
 			const Phaser = await import("phaser");
 			const { _lista_escenas } = await import("./clases_juego/manejadores/importador_escenas");
@@ -29,7 +29,7 @@ export default function Juego() {
 			});
 		}
 		initPhaser();
-	}, []);
+	}, []);*/
 
 	return (
 		<>

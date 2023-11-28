@@ -1,14 +1,4 @@
 import Phaser from "phaser";
-import { crearAnimacion } from "../manejadores/manejador_elementos_escena";
-// Importaciones de fondos, iconos y banners
-import backgroundImg from '../../assets/Fondos/Fondo_Seleccionar_Personaje.jpg'
-import banner_Seleccion from '../../assets/Banners/Banner_General_Textos.png'
-import banner_Contexto from '../../assets/Banners/Baner_Contextos_Vendedor.png'
-
-// Sheets
-import vendedor_principal from '../../assets/Personajes/Vendedor_PP_Style_Sheet.png'
-import canasta from '../../assets/Personajes/Cesta_Vendedor_Style_Sheet.png'
-import ojos_gato from '../../assets/Personajes/Ojos_Gato_Vendedor_Style_Sheet.png'
 import { ManejadorParpadeoLinea, repeticionAnimacion } from "../manejadores/manejador_timers_eventos";
 
 // Cursores de selección
@@ -31,6 +21,7 @@ let style = undefined
 
 let configTimer = { parpadeo: undefined, animacion: { vendedor: undefined, canasta: undefined } }
 let lineaSelec = undefined
+let escenaAnterior
 
 export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
 
@@ -38,47 +29,32 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
         super({ key: 'vendedor_pantalla_principal' })
     }
 
-    preload() {
-        // Carga de fondos, iconos y banners
-        this.load.image('background_seleccion_personaje', backgroundImg)
-        this.load.image('banner_texto_general', banner_Seleccion)
-        this.load.image('banner_contexto', banner_Contexto)
-
-        this.load.spritesheet('vendedor_pp', vendedor_principal, { frameWidth: 208, frameHeight: 234 })
-        this.load.spritesheet('canasta', canasta, { frameWidth: 208, frameHeight: 291 })
-        this.load.spritesheet('ojos_gato', ojos_gato, { frameWidth: 208, frameHeight: 291 })
+    init (data) {
+        if (data) {
+            escenaAnterior = data
+        }
     }
 
-    create() {
+    preload () {
+    }
+
+    create () {
         cursors.movimiento.flechas = this.input.keyboard.createCursorKeys();
         cursors.movimiento.letras = this.input.keyboard.addKeys('W,A,S,D');
         cursors.acciones.confirmar = this.input.keyboard.addKey('F')
 
         let posicion = { x: this.game.canvas.width, y: this.game.canvas.height }
 
-        this.idle_vendedor_pp = this.add.sprite(posicion.x * 0.25, posicion.y * 0.4, 'vendedor_pp').setScale(3, 3)
-        this.canasta = this.add.sprite(posicion.x * 0.25, posicion.y * 0.36, 'canasta').setScale(3.5, 3.5)
-        this.ojos_gato = this.add.sprite(posicion.x * 0.25, posicion.y * 0.36, 'ojos_gato').setScale(3.5, 3.5)
+        this.idle_vendedor_pp = this.add.sprite(posicion.x * 0.25, posicion.y * 0.4, '_sprite_vendedor_tienda').setScale(3, 3)
+        this.canasta = this.add.sprite(posicion.x * 0.25, posicion.y * 0.36, '_sprite_cesta_vendedor').setScale(3.5, 3.5)
+        this.ojos_gato = this.add.sprite(posicion.x * 0.25, posicion.y * 0.36, '_sprite_ojos_gato').setScale(3.5, 3.5)
 
-        this.add.image(posicion.x / 2, posicion.y / 2, 'background_seleccion_personaje').setScale(0.8, 1).setDepth(-1)
-        this.add.image(posicion.x / 2, posicion.y * 0.8, 'banner_texto_general').setAlpha(0.7).setScale(0.8, 1).setDepth(1)
-        this.add.image(posicion.x * 0.75, posicion.y * 0.35, 'banner_contexto').setScale(0.8, 0.8).setDepth(1)
+        this.add.image(posicion.x / 2, posicion.y / 2, '_fondo_vegetacion').setScale(0.8, 1).setDepth(-1)
+        this.add.image(posicion.x / 2, posicion.y * 0.8, '_banner_dialogos').setAlpha(0.7).setScale(0.8, 1).setDepth(1)
+        this.add.image(posicion.x * 0.75, posicion.y * 0.35, '_banner_contextos').setScale(0.8, 0.8).setDepth(1)
 
-
-        if (!this.anims.exists('idle_vendedro_pp')) {
-            crearAnimacion(this, 'vendedor_pp', 'idle_vendedro_pp', 0, 8, 7, 0)
-        }
-
-        if (!this.anims.exists('idle_canasta')) {
-            crearAnimacion(this, 'canasta', 'idle_canasta', 0, 6, 6)
-        }
-
-        if (!this.anims.exists('ojos_gato')) {
-            crearAnimacion(this, 'ojos_gato', 'ojos_gato', 0, 6, 6, 0)
-        }
-
-        this.idle_vendedor_pp.anims.play('idle_vendedro_pp')
-        this.canasta.anims.play('idle_canasta')
+        this.idle_vendedor_pp.anims.play('idle_vendedro_tienda')
+        this.canasta.anims.play('idle_cesta')
 
         style = {
             fontFamily: 'Arial',
@@ -132,7 +108,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
         // Configuracion de timer vendedor
         configTimer.animacion.vendedor = {
             delay: 7000,
-            callback: () => { this.idle_vendedor_pp.anims.play('idle_vendedro_pp') },
+            callback: () => { this.idle_vendedor_pp.anims.play('idle_vendedro_tienda') },
             callbackScope: this,
             loop: true
         }
@@ -142,7 +118,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
         // Configuracion de timer vendedor
         configTimer.animacion.canasta = {
             delay: 3150,
-            callback: () => { this.ojos_gato.anims.play('ojos_gato') },
+            callback: () => { this.ojos_gato.anims.play('animacion_ojos_gato') },
             callbackScope: this,
             loop: true
         }
@@ -161,7 +137,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
 
     }
 
-    seleccion() {
+    seleccion () {
         switch (true) {
             // Selección Opciones Hacia Arriba
             case cursors.movimiento.flechas.up.isDown || cursors.movimiento.letras.W.isDown:
@@ -178,7 +154,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
                     this.manejadorParpadeo.reiniciar()
                 }
                 break
-                // Selección Opciones Hacia Arriba
+            // Selección Opciones Hacia Arriba
             case cursors.movimiento.flechas.down.isDown || cursors.movimiento.letras.S.isDown:
                 if (opcionSeleccionada == 2) {
                     underline[opcionSeleccionada].visible = false
@@ -193,19 +169,19 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
                     this.manejadorParpadeo.reiniciar()
                 }
                 break
-                // Opción Comprar Items
+            // Opción Comprar Items
             case cursors.acciones.confirmar.isDown && opcionSeleccionada == 0:
                 console.log(0)
                 break
-                // Opción Preguntas
+            // Opción Preguntas
             case cursors.acciones.confirmar.isDown && opcionSeleccionada == 1:
-                console.log(1)
+                this.scene.start('pantalla_preguntas')
                 break
-                // Opción Cancelar
+            // Opción Cancelar
             case cursors.acciones.confirmar.isDown && opcionSeleccionada == 2:
                 this.timer.remove()
                 //this.scene.start('game')
-                this.scene.start('seleccion_personaje')
+                this.scene.start(escenaAnterior.key, { entrada: 'vendedor', posicion: escenaAnterior.posicion })
                 break
         }
     }

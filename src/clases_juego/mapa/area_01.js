@@ -62,7 +62,7 @@ export class Area_01 extends Phaser.Scene {
             posicionY: posicion.y,
             anchoSalida: posicion.y * 0.15,
             altoSalida: posicion.x * 0.25,
-            valoresSiguienteEscena: { entrada: 'izq' },
+            valoresSiguienteEscena: { entrada: 'der' },
             funcionesExtra: () => {
                 if (this.timer) this.timer.remove()
             }

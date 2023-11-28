@@ -36,9 +36,13 @@ export class Area_33 extends Phaser.Scene {
         })
 
         let posicion = { x: this.game.canvas.width / 2, y: this.game.canvas.height / 2 }
-        this.add.image(posicion.x, posicion.y, '_fondo_exterior_casa_juan').setScale(0.8, 0.735).setRotation(3.141593).setDepth(-1)
+        this.add.image(posicion.x, posicion.y, '_fondo_area_33').setScale(0.855, 0.785).setDepth(-1)
 
-        this.player = crearPersonaje(this, '_sprites_juan_cupul', entrada_a_escena, { escalaPersonaje: 1.25, })
+        this.player = crearPersonaje(this, '_sprites_juan_cupul', entrada_a_escena, {
+            escalaPersonaje: 1.25,
+            esteY: posicion.y * 1.085,
+            oesteY: posicion.y * 1.085
+        })
 
         ajustarAreaColision(this.player, {
             sizeX: 0.28125,
@@ -50,18 +54,18 @@ export class Area_33 extends Phaser.Scene {
         // Salida Este
         generarSalidaEscena(this, this.player, 'area_01', {
             posicionX: posicion.x * 2.015,
-            posicionY: posicion.y,
+            posicionY: posicion.y * 1.085,
             anchoSalida: posicion.y * 0.15,
-            altoSalida: posicion.x * 0.25,
+            altoSalida: posicion.x * 0.236,
             valoresSiguienteEscena: { entrada: 'izq' },
         })
 
         // Salida Oeste
         generarSalidaEscena(this, this.player, 'area_35', {
             posicionX: 0 - posicion.x * 0.015,
-            posicionY: posicion.y,
+            posicionY: posicion.y * 1.085,
             anchoSalida: posicion.y * 0.15,
-            altoSalida: posicion.x * 0.25,
+            altoSalida: posicion.x * 0.236,
             valoresSiguienteEscena: { entrada: 'der' },
         })
 

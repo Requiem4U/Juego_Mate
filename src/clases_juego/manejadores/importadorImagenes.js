@@ -20,9 +20,13 @@ import _fondo_minijuego_principal from '../../assets/Fondos/MiniJuego_Pantalla_I
 import _fondo_vegetacion from '../../assets/Fondos/Fondo_Seleccionar_Personaje.jpg'
 import _fondo_interior_casa_juan from '../../assets/Fondos/Interior_Casa_Juan_Cupul.jpg'
 import _fondo_exterior_casa_juan from '../../assets/Fondos/Fondo_Camino_Normal_S.jpg'
+import _fondo_area_33 from '../../assets/Fondos/Fondo_A33.png'
+import _fondo_area_35 from '../../assets/Fondos/Fondo_A35.png'
+import _fondo_basta_mate from '../../assets/Fondos/Fondo_Basta_Matematico.png'
 
 // Casas
 import _casa_juan from '../../assets/Objetos/Casas/Casa_JP_Exterior.png'
+import _casa_milpa from '../../assets/Objetos/Casas/Casa_Milpa.png'
 
 // Decoración
 import _machete_1 from "../../assets/Objetos/Armas/Machete_Juan.png"
@@ -66,9 +70,13 @@ export class PrecargaImagenes extends Phaser.Scene {
         this.load.image('_fondo_vegetacion', _fondo_vegetacion)
         this.load.image('_fondo_interior_casa_juan', _fondo_interior_casa_juan)
         this.load.image('_fondo_exterior_casa_juan', _fondo_exterior_casa_juan)
+        this.load.image('_fondo_area_33', _fondo_area_33)
+        this.load.image('_fondo_area_35', _fondo_area_35)
+        this.load.image('_fondo_basta_mate', _fondo_basta_mate)
 
         // Casas
         this.load.image('_casa_juan', _casa_juan)
+        this.load.image('_casa_milpa', _casa_milpa)
 
         // Decoración
         this.load.image('_machete_1', _machete_1)
@@ -113,20 +121,29 @@ export class PrecargaImagenes extends Phaser.Scene {
         // Ceación de animaciones de caminata Juan Cupul
         crearAnimacion(this, '_sprites_juan_cupul', 'walkDown_juan', 0, 3);
         crearAnimacion(this, '_sprites_juan_cupul', 'walkUp_juan', 4, 7);
-        crearAnimacion(this, '_sprites_juan_cupul', 'walkRight_juan', 8, 11);
-        crearAnimacion(this, '_sprites_juan_cupul', 'walkLeft_juan', 12, 15);
+        crearAnimacion(this, '_sprites_juan_cupul', 'walkLeft_juan', 8, 11);
+        crearAnimacion(this, '_sprites_juan_cupul', 'walkRight_juan', 12, 15);
         //Creación de animación Idle Juan Cupul
-        crearAnimacion(this, '_sprites_juan_cupul', 'idleFront_juan', 0, 3);
-        crearAnimacion(this, '_sprites_juan_cupul', 'idleBack_juan', 4, 7);
-        crearAnimacion(this, '_sprites_juan_cupul', 'idleLeft_juan', 8, 11);
-        crearAnimacion(this, '_sprites_juan_cupul', 'idleRight_juan', 12, 15);
+        crearAnimacion(this, '_sprites_juan_cupul', 'idleFront_juan', 16, 19, { frecuencia_frames: 2.1 });
+        crearAnimacion(this, '_sprites_juan_cupul', 'idleBack_juan', 20, 23, { frecuencia_frames: 2.1 });
+        crearAnimacion(this, '_sprites_juan_cupul', 'idleLeft_juan', 24, 27, { frecuencia_frames: 2.1 });
+        crearAnimacion(this, '_sprites_juan_cupul', 'idleRight_juan', 28, 31, { frecuencia_frames: 2.1 });
 
         crearAnimacion(this, '_sprite_globo_dialogo', 'idle_dialogo', 0, 4, { frecuencia_frames: 5.5, repeticion: 0 });
         crearAnimacion(this, '_sprite_vendedor', 'idle_vendedor', 0, 9, 5);
-        //this.scene.start('game')
+
+        crearAnimacion(this, '_sprite_vendedor_tienda', 'idle_vendedro_tienda', 0, 8, { frecuencia_frames: 7, repeticion: 0 })
+        crearAnimacion(this, '_sprite_ojos_gato', 'animacion_ojos_gato', 0, 6, { frecuencia_frames: 6, repeticion: 0 })
+        crearAnimacion(this, '_sprite_cesta_vendedor', 'idle_cesta', 0, 6, { frecuencia_frames: 5 })
+
+        this.scene.start('game')
         //this.scene.start('pantalla_inicio')
-        this.scene.start('area_32_interior')
-        //this.scene.start('area_04', { entrada: 'norte' })
+        //this.scene.start('area_32_interior')
+        //this.scene.start('area_35', { entrada: 'der' })
+        //this.scene.start('area_04', { entrada: 'arriba' })
+        //this.scene.start('basta_matematico')
+        //this.scene.start('vendedor_pantalla_principal')
+        //this.scene.start('pantalla_preguntas')
     }
 
     update () {

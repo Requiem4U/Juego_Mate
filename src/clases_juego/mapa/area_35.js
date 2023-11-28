@@ -36,7 +36,8 @@ export class Area_35 extends Phaser.Scene {
         })
 
         let posicion = { x: this.game.canvas.width / 2, y: this.game.canvas.height / 2 }
-        this.add.image(posicion.x, posicion.y, '_fondo_exterior_casa_juan').setScale(0.8, 0.735).setRotation(3.141593).setDepth(-1)
+        this.add.image(posicion.x, posicion.y, '_fondo_area_35').setScale(0.855, 0.785).setDepth(-1)
+        this.add.image(posicion.x * 0.318, posicion.y * 0.85, '_casa_milpa').setScale(0.82).setDepth(0)
 
         this.player = crearPersonaje(this, '_sprites_juan_cupul', entrada_a_escena, { escalaPersonaje: 1.25, })
 
@@ -52,7 +53,7 @@ export class Area_35 extends Phaser.Scene {
             posicionX: posicion.x * 2.015,
             posicionY: posicion.y,
             anchoSalida: posicion.y * 0.15,
-            altoSalida: posicion.x * 0.25,
+            altoSalida: posicion.x * 0.236,
             valoresSiguienteEscena: { entrada: 'izq' },
         })
 
