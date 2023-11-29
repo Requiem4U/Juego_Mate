@@ -56,7 +56,7 @@ export class Area_02 extends Phaser.Scene {
         })
 
         // Salida Oeste
-        generarSalidaEscena(this, this.player, 'area_01', {
+        generarSalidaEscena(this, this.player, 'area_33', {
             posicionX: 0 - posicion.x * 0.015,
             posicionY: posicion.y,
             anchoSalida: posicion.y * 0.15,

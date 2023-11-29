@@ -360,7 +360,23 @@ function moverPersonajeAnimado (escena, personaje, x1, y1, x2, y2, duracion, ani
       duration: duracion,
       onComplete: () => {
         // La animación ha finalizado
-        console.log('Movimiento finalizado');
+        escena.time.delayedCall(1000, () => {
+          // Crea una animación para el movimiento del personaje de (x1, y1) a (x2, y2)
+          const tween = escena.tweens.add({
+            targets: personaje,
+            x: x2 + (x2 - x1),
+            y: y1,
+            duration: duracion,
+            onComplete: () => {
+              // La animación ha finalizado
+              personaje.anims.play('idleRight_mujer')
+            }
+          });
+
+          // Ejecutar la animación especificada
+          personaje.anims.play('walkUp_mujer');
+        });
+
         personaje.anims.play('idleFront_mujer')
       }
     });

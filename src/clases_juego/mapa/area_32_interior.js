@@ -19,7 +19,10 @@ let entradaPuerta = false
 
 let desplazamientoDialogo
 let texto
-let dialogos
+let dialogos = {
+    controles: undefined,
+    novia: undefined
+}
 let partesDialogo
 let dialogoTerminado = false
 
@@ -47,9 +50,17 @@ export class Area_32_Interior extends Phaser.Scene {
 
         cursors.acciones.confirmar = this.input.keyboard.addKey('F')
 
-        dialogos = ['Usa las teclas <- -> para moverse de izquierda a derecha',
-            'Usa las teclas para moverse arriba y abajo']
-        partesDialogo = dialogos.length - 1
+        dialogos.novia = [
+            'María Dolores:\n\n(sorprendida) Buenos días, veo que apenas te levantas.',
+            'Juan Cupul:\n\nBuenos días, los preparativos para la boda de mañana me dejaron despierto hasta tarde.',
+            'María Dolores:\n\nBueno, no te sobre esfuerces, no queremos mañana no estes disponible.',
+            'Juan Cupul:\n\nNo te preocupes, es lo que menos quiero.',
+            'María Dolores:\n\nBueno, ven a desayunar que Filiberto Tun ha llegado y dice que quiere hablar contigo.',
+            'Juan Cupul:\n\nYa voy, debe de ser importante.',
+            'María Dolores:\n\nNo olvides que puedes moverte con las flechas del teclado.',
+            'Juan Cupul:\n\nGracias.'
+        ]
+        partesDialogo = dialogos.novia.length - 1
         desplazamientoDialogo = 0
 
         this.Movimientos = new Manejador_Movimiento(this)
@@ -81,9 +92,10 @@ export class Area_32_Interior extends Phaser.Scene {
         if (entradaPuerta) {
             player = this.physics.add.sprite(posicion.x * 1.015, posicion.y * 1.68, '_sprites_juan_cupul').setScale(1.25)
             player.anims.play('idleFront_juan')
+            this.datosJg.actualzizarAyudaControlesNPC_Disponible()
         } else {
-            player = this.physics.add.sprite(posicion.x, posicion.y, '_sprites_juan_cupul').setScale(1.25)
-            player.anims.play('idleFront_juan')
+            player = this.physics.add.sprite(posicion.x * 0.8, posicion.y, '_sprites_juan_cupul').setScale(1.25)
+            player.anims.play('idleRight_juan')
         }
 
         ajustarAreaColision(player, {
@@ -112,13 +124,11 @@ export class Area_32_Interior extends Phaser.Scene {
 
         if (this.datosJg.ayudaControlesNPC_Disponible()) {
             crearPersonaje(this, { x: posicion.x * 1.1, y: posicion.y })
+            this.novia_juan.anims.play('idleFront_mujer')
         } else {
-            this.timer = this.time.addEvent({
-                delay: 2500,
-                callback: () => {
-                    crearPersonaje(this, { x: posicion.x * 1.1, y: posicion.y })
-                },
-                callbackScope: this
+            this.time.delayedCall(2500, () => {
+                crearPersonaje(this, { x: posicion.x * 1.015, y: posicion.y * 1.68 })
+                moverPersonajeAnimado(this, this.novia_juan, posicion)
             })
 
             this.finTexto = false
@@ -138,10 +148,10 @@ export class Area_32_Interior extends Phaser.Scene {
         })
 
         this.timerTexto = this.time.addEvent({
-            delay: 80,
+            delay: 40,
             callback: () => {
-                texto.text += dialogos[this.indexTexto][desplazamientoDialogo++]
-                this.finDialog = false
+                texto.text += dialogos.novia[this.indexTexto][desplazamientoDialogo++]
+                this.permitirCambio = false
             },
             callbackScope: this,
             loop: true
@@ -153,6 +163,7 @@ export class Area_32_Interior extends Phaser.Scene {
         this.teclaPrecionada = false
 
         this.timer2 = this.time.addEvent({})
+        this.permitirCambio = false
 
     }
 
@@ -164,69 +175,53 @@ export class Area_32_Interior extends Phaser.Scene {
             this.Movimientos.movimientoPersonaje(player)
         }
 
-        cursors.acciones.confirmar.isDown ? this.teclaPrecionada = true : this.teclaPrecionada = false
+        if (cursors.acciones.confirmar.isDown) {
+            if (this.interaccionNoviaJuan) {
+                if (!this.bannerTxt && !this.finTexto) {
+                    this.dialogos = true
+                    this.bannerTxt = this.add.image(posicion.x * 1.015, posicion.y * 1.72, '_banner_dialogos').setScale(0.8, 0.9)
+                }
 
-        if (cursors.acciones.confirmar.isDown && this.teclaPrecionada) {
-            if (this.finDialog) {
-                texto.text = ''
-                this.finDialog = false
-                this.timerTexto.paused = false
+                if (!texto && !this.finTexto) {
+                    texto = this.add.text(posicion.x * 0.20, posicion.y * 1.55, dialogos.novia[this.indexTexto++], {
+                        fontFamily: 'Arial',
+                        fontSize: 32,
+                        color: '#ffffff',
+                        align: 'left'
+                    }).setOrigin(0)
+                    this.time.delayedCall(3000, () => { this.permitirCambio = true })
+                }
+
             }
             if (this.finTexto) {
-                this.dialogos = false
-                this.datosJg.actualzizarAyudaControlesNPC_Disponible()
                 texto.destroy()
                 this.bannerTxt.destroy()
+                this.dialogos = false
                 this.timer2 = this.time.delayedCall(800, () => {
                     texto = undefined
                     this.bannerTxt = undefined
                     this.indexTexto = 0
                     desplazamientoDialogo = 0
-                    this.finDialog = false
+                    this.permitirCambio = false
                     this.dialogos = false
                     this.finTexto = false
                 }, [], this)
+                this.datosJg.actualzizarAyudaControlesNPC_Disponible()
+            } else if (texto && this.permitirCambio) {
+                this.permitirCambio = false
+                texto.text = dialogos.novia[this.indexTexto++]
+                this.time.delayedCall(3000, () => { this.permitirCambio = true })
             }
         }
 
-        if (cursors.acciones.confirmar.isDown && this.interaccionNoviaJuan && this.teclaPrecionada) {
-            if (!this.bannerTxt && !this.finTexto) {
-                console.log(1)
-                this.dialogos = true
-                this.bannerTxt = this.add.image(posicion.x * 1.015, posicion.y * 1.75, '_banner_dialogos').setScale(0.8)
-            }
 
-            if (!texto && !this.finTexto) {
-                console.log(2)
-                texto = this.add.text(this.bannerTxt.x, this.bannerTxt.y, '', {
-                    fontFamily: 'Arial',
-                    fontSize: 32,
-                    color: '#ffffff',
-                    align: 'center'
-                }).setOrigin(0.5)
-
-                this.timerTexto.paused = false
-            }
-
-        }
-
-        if (desplazamientoDialogo >= dialogos[this.indexTexto].length) {
-            if (this.indexTexto < partesDialogo) {
-                this.timerTexto.paused = true
-                this.finDialog = true
-                desplazamientoDialogo = 0
-                this.indexTexto++
-            } else {
-                this.timerTexto.paused = true
-                this.finTexto = true
-            }
-        }
+        this.indexTexto < partesDialogo ? this.finTexto = false : this.finTexto = true
     }
 }
 
 function crearPersonaje (escena, posicion = { x: 100, y: 100 }) {
     escena.novia_juan = escena.physics.add.sprite(posicion.x, posicion.y, '_sprites_mujer').setScale(1.25)
-    escena.novia_juan.anims.play('idleFront_mujer')
+    escena.novia_juan.anims.play('idleBack_mujer')
     escena.idle_dialogo = escena.add.sprite(escena.novia_juan.x, escena.novia_juan.y, '_sprite_globo_dialogo').setOrigin(0.5, 1).setScale(0.8)
     escena.idle_dialogo.visible = false
 
@@ -235,6 +230,8 @@ function crearPersonaje (escena, posicion = { x: 100, y: 100 }) {
     }
 
     escena.physics.add.overlap(player, escena.novia_juan, () => {
+        escena.idle_dialogo.x = escena.novia_juan.x
+        escena.idle_dialogo.y = escena.novia_juan.y * 0.93
         escena.interaccionNoviaJuan = true
     }, null, this)
 
@@ -259,4 +256,31 @@ function crearPersonaje (escena, posicion = { x: 100, y: 100 }) {
         callbackScope: this,
         loop: true
     })
+}
+
+function moverPersonajeAnimado (escena, personaje, medidasEscena) {
+    escena.time.delayedCall(100, () => {
+        escena.tweens.add({
+            targets: personaje,
+            x: medidasEscena.x * 1.015,
+            y: medidasEscena.y,
+            duration: 2000,
+            onComplete: () => {
+                escena.time.delayedCall(150, () => {
+                    escena.tweens.add({
+                        targets: personaje,
+                        x: medidasEscena.x * 0.93,
+                        y: medidasEscena.y,
+                        duration: 700,
+                        onComplete: () => {
+                            personaje.anims.play('idleLeft_mujer')
+                        }
+                    });
+                    personaje.anims.play('walkLeft_mujer');
+                });
+                personaje.anims.play('idleLeft_mujer')
+            }
+        });
+        personaje.anims.play('walkUp_mujer');
+    });
 }

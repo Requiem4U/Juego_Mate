@@ -52,7 +52,7 @@ export class Area_33 extends Phaser.Scene {
         })
 
         // Salida Este
-        generarSalidaEscena(this, this.player, 'area_01', {
+        generarSalidaEscena(this, this.player, 'area_02', {
             posicionX: posicion.x * 2.015,
             posicionY: posicion.y * 1.085,
             anchoSalida: posicion.y * 0.15,

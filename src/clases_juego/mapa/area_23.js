@@ -56,15 +56,6 @@ export class Area_23 extends Phaser.Scene {
             valoresSiguienteEscena: { entrada: 'abajo' },
         })
 
-        // Salida Sur
-        generarSalidaEscena(this, this.player, 'area_27', {
-            posicionX: posicion.x * 1.015,
-            posicionY: posicion.y * 2.05,
-            anchoSalida: posicion.x * 0.25,
-            altoSalida: posicion.y * 0.15,
-            valoresSiguienteEscena: { entrada: 'arriba' },
-        })
-
         // Salida Este
         generarSalidaEscena(this, this.player, 'area_24', {
             posicionX: posicion.x * 2.015,

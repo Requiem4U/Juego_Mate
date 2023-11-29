@@ -136,11 +136,11 @@ export class PrecargaImagenes extends Phaser.Scene {
         crearAnimacion(this, '_sprite_ojos_gato', 'animacion_ojos_gato', 0, 6, { frecuencia_frames: 6, repeticion: 0 })
         crearAnimacion(this, '_sprite_cesta_vendedor', 'idle_cesta', 0, 6, { frecuencia_frames: 5 })
 
-        this.scene.start('game')
+        //this.scene.start('game')
         //this.scene.start('pantalla_inicio')
         //this.scene.start('area_32_interior')
         //this.scene.start('area_35', { entrada: 'der' })
-        //this.scene.start('area_04', { entrada: 'arriba' })
+        this.scene.start('area_04', { entrada: 'arriba' })
         //this.scene.start('basta_matematico')
         //this.scene.start('vendedor_pantalla_principal')
         //this.scene.start('pantalla_preguntas')

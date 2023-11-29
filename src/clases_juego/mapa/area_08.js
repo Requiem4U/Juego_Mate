@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { ajustarAreaColision, crearAnimacion, crearPersonaje, generarSalidaEscena } from '../manejadores/manejador_elementos_escena'
+import { ajustarAreaColision, crearPersonaje, generarSalidaEscena } from '../manejadores/manejador_elementos_escena'
 
 import { Manejador_Movimiento } from '../manejadores/manejador_movimientos'
 
@@ -63,24 +63,6 @@ export class Area_08 extends Phaser.Scene {
             anchoSalida: posicion.x * 0.25,
             altoSalida: posicion.y * 0.15,
             valoresSiguienteEscena: { entrada: 'arriba' },
-        })
-
-        // Salida Este
-        generarSalidaEscena(this, this.player, 'area_09', {
-            posicionX: posicion.x * 2.015,
-            posicionY: posicion.y,
-            anchoSalida: posicion.y * 0.15,
-            altoSalida: posicion.x * 0.25,
-            valoresSiguienteEscena: { entrada: 'izq' },
-        })
-
-        // Salida Oeste
-        generarSalidaEscena(this, this.player, 'area_07', {
-            posicionX: 0 - posicion.x * 0.015,
-            posicionY: posicion.y,
-            anchoSalida: posicion.y * 0.15,
-            altoSalida: posicion.x * 0.25,
-            valoresSiguienteEscena: { entrada: 'der' },
         })
 
     }

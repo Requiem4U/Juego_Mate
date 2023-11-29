@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { ajustarAreaColision, crearAnimacion, crearPersonaje, generarSalidaEscena } from '../manejadores/manejador_elementos_escena'
+import { ajustarAreaColision, crearPersonaje, generarSalidaEscena } from '../manejadores/manejador_elementos_escena'
 
 import { Manejador_Movimiento } from '../manejadores/manejador_movimientos'
 
@@ -54,9 +54,6 @@ export class Area_14 extends Phaser.Scene {
             anchoSalida: posicion.x * 0.25,
             altoSalida: posicion.y * 0.15,
             valoresSiguienteEscena: { entrada: 'abajo' },
-            funcionesExtra: () => {
-                if (this.timer) this.timer.remove()
-            }
         })
 
         // Salida Sur
@@ -75,9 +72,6 @@ export class Area_14 extends Phaser.Scene {
             anchoSalida: posicion.y * 0.15,
             altoSalida: posicion.x * 0.25,
             valoresSiguienteEscena: { entrada: 'der' },
-            funcionesExtra: () => {
-                if (this.timer) this.timer.remove()
-            }
         })
 
     }

@@ -47,33 +47,6 @@ export class Area_20 extends Phaser.Scene {
             offsetY: 0.578125
         })
 
-        // Salida Norte
-        generarSalidaEscena(this, this.player, 'area_18', {
-            posicionX: posicion.x * 1.015,
-            posicionY: posicion.y * 0.02,
-            anchoSalida: posicion.x * 0.25,
-            altoSalida: posicion.y * 0.15,
-            valoresSiguienteEscena: { entrada: 'abajo' },
-        })
-
-        // Salida Sur
-        generarSalidaEscena(this, this.player, 'area_25', {
-            posicionX: posicion.x * 1.015,
-            posicionY: posicion.y * 2.05,
-            anchoSalida: posicion.x * 0.25,
-            altoSalida: posicion.y * 0.15,
-            valoresSiguienteEscena: { entrada: 'arriba' },
-        })
-
-        // Salida Este
-        generarSalidaEscena(this, this.player, 'area_21', {
-            posicionX: posicion.x * 2.015,
-            posicionY: posicion.y,
-            anchoSalida: posicion.y * 0.15,
-            altoSalida: posicion.x * 0.25,
-            valoresSiguienteEscena: { entrada: 'izq' },
-        })
-
         // Salida Oeste
         generarSalidaEscena(this, this.player, 'area_31', {
             posicionX: 0 - posicion.x * 0.015,
