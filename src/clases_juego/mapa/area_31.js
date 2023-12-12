@@ -36,7 +36,10 @@ export class Area_31 extends Phaser.Scene {
         })
 
         let posicion = { x: this.game.canvas.width / 2, y: this.game.canvas.height / 2 }
-        this.add.image(posicion.x, posicion.y, '_fondo_exterior_casa_juan').setScale(0.8, 0.735).setRotation(3.141593).setDepth(-1)
+        this.add.image(posicion.x, posicion.y, '_fondo_area_31').setScale(0.855, 0.785).setDepth(-1)
+
+        this.add.image(posicion.x * 0.35, posicion.y * 0.6, '_arbol_2').setScale(0.6).setDepth(-1)
+        this.add.image(posicion.x * 1.65, posicion.y, '_arbol_2').setScale(0.6).setDepth(-1)
 
         this.player = crearPersonaje(this, '_sprites_juan_cupul', entrada_a_escena, { escalaPersonaje: 1.25, })
 
@@ -49,31 +52,33 @@ export class Area_31 extends Phaser.Scene {
 
         // Salida Sur
         generarSalidaEscena(this, this.player, 'area_24', {
-            posicionX: posicion.x * 1.015,
+            posicionX: posicion.x,
             posicionY: posicion.y * 2.05,
             anchoSalida: posicion.x * 0.25,
             altoSalida: posicion.y * 0.15,
             valoresSiguienteEscena: { entrada: 'arriba' },
         })
 
-        // Salida Este
-        generarSalidaEscena(this, this.player, 'area_20', {
-            posicionX: posicion.x * 2.015,
-            posicionY: posicion.y,
-            anchoSalida: posicion.y * 0.15,
-            altoSalida: posicion.x * 0.25,
-            valoresSiguienteEscena: { entrada: 'izq' },
-        })
 
-        // Salida Oeste
-        generarSalidaEscena(this, this.player, 'area_17', {
-            posicionX: 0 - posicion.x * 0.015,
-            posicionY: posicion.y,
-            anchoSalida: posicion.y * 0.15,
-            altoSalida: posicion.x * 0.25,
-            valoresSiguienteEscena: { entrada: 'der' },
-        })
+        this.r1 = this.add.rectangle(posicion.x * 0.48, posicion.y * 1.8, 200, 200)
+        this.r2 = this.add.rectangle(posicion.x * 1.55, posicion.y * 1.8, 200, 200)
+        this.r3 = this.add.rectangle(posicion.x * 0.69, posicion.y * 1.92, posicion.x * 0.4, 50)
+        this.r4 = this.add.rectangle(posicion.x * 1.335, posicion.y * 1.92, posicion.x * 0.45, 50)
+        this.r5 = this.add.rectangle(posicion.x * 0.69, posicion.y * 1.65, posicion.x * 0.4, 50)
+        this.r6 = this.add.rectangle(posicion.x * 1.335, posicion.y * 1.65, posicion.x * 0.45, 50)
+        this.entradaIglesia = this.add.rectangle(posicion.x, posicion.y * 1.62, posicion.x * 0.25, 50)
 
+        this.physics.world.enable([this.r1, this.r2, this.r3, this.r4, this.r5, this.r6, this.entradaIglesia])
+        this.r1.body.immovable = true
+        this.r2.body.immovable = true
+        this.r3.body.immovable = true
+        this.r4.body.immovable = true
+        this.r5.body.immovable = true
+        this.r6.body.immovable = true
+        this.entradaIglesia.body.immovable = true
+
+        this.physics.add.collider(this.player, [this.r1, this.r2, this.r3, this.r4, this.r5, this.r6])
+        this.physics.add.collider(this.player, this.entradaIglesia)
     }
 
     update () {

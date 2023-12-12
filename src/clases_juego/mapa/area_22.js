@@ -35,7 +35,7 @@ export class Area_22 extends Phaser.Scene {
         })
 
         let posicion = { x: this.game.canvas.width / 2, y: this.game.canvas.height / 2 }
-        this.add.image(posicion.x, posicion.y, '_fondo_exterior_casa_juan').setScale(0.8, 0.735).setRotation(3.141593).setDepth(-1)
+        this.add.image(posicion.x, posicion.y, '_fondo_area_22').setScale(0.855, 0.785).setDepth(-1)
 
         this.player = crearPersonaje(this, '_sprites_juan_cupul', entrada_a_escena, { escalaPersonaje: 1.25, })
 
@@ -48,7 +48,7 @@ export class Area_22 extends Phaser.Scene {
 
         // Salida Norte
         generarSalidaEscena(this, this.player, 'area_16', {
-            posicionX: posicion.x * 1.015,
+            posicionX: posicion.x,
             posicionY: posicion.y * 0.02,
             anchoSalida: posicion.x * 0.25,
             altoSalida: posicion.y * 0.15,
@@ -57,13 +57,21 @@ export class Area_22 extends Phaser.Scene {
 
         // Salida Sur
         generarSalidaEscena(this, this.player, 'area_26', {
-            posicionX: posicion.x * 1.015,
+            posicionX: posicion.x,
             posicionY: posicion.y * 2.05,
             anchoSalida: posicion.x * 0.25,
             altoSalida: posicion.y * 0.15,
             valoresSiguienteEscena: { entrada: 'arriba' },
         })
 
+        this.r1 = this.add.rectangle(posicion.x * 0.77, posicion.y, 100, posicion.y * 2)
+        this.r2 = this.add.rectangle(posicion.x * 1.22, posicion.y, 100, posicion.y * 2)
+
+        this.physics.world.enable([this.r1, this.r2])
+        this.r1.body.immovable = true
+        this.r2.body.immovable = true
+
+        this.physics.add.collider(this.player, [this.r1, this.r2])
     }
 
     update () {

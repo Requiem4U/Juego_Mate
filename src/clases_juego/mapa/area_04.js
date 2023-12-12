@@ -1,19 +1,10 @@
 import Phaser from 'phaser'
-import { ajustarAreaColision, crearAnimacion, crearAreaColision, crearPersonaje, generarSalidaEscena } from '../manejadores/manejador_elementos_escena'
+import { ajustarAreaColision, crearGrupoElementos, crearPersonaje, generarSalidaEscena } from '../manejadores/manejador_elementos_escena'
 
 import { Manejador_Movimiento } from '../manejadores/manejador_movimientos'
 
 
-let cursors = {
-    acciones: { confirmar: undefined }
-}
-
-let datosEscena = {
-    key: 'area_04', posicion: {
-        x: 0,
-        y: 0
-    }, entrada_a_escena: undefined
-}
+let entrada_a_escena
 
 export class Area_04 extends Phaser.Scene {
 
@@ -23,10 +14,7 @@ export class Area_04 extends Phaser.Scene {
 
     init (data) {
         if (data) {
-            datosEscena.entrada_a_escena = data.entrada
-
-            if (data.posicion)
-                datosEscena.posicion = data.posicion
+            entrada_a_escena = data.entrada
         }
     }
 
@@ -48,19 +36,10 @@ export class Area_04 extends Phaser.Scene {
             walkRight: 'walkRight_juan'
         })
 
-        cursors.acciones.confirmar = this.input.keyboard.addKey('F')
-
         let posicion = { x: this.game.canvas.width / 2, y: this.game.canvas.height / 2 }
-        this.add.image(posicion.x, posicion.y, '_fondo_exterior_casa_juan').setScale(0.8, 0.735).setRotation(3.141593).setDepth(-1)
+        this.add.image(posicion.x, posicion.y, '_fondo_area_04').setScale(0.855, 0.785).setDepth(-1)
 
-        this.sprite_vendedor = this.physics.add.sprite(posicion.x * 1.6, posicion.y * 0.8, '_sprite_vendedor').setOrigin(0.48, 0.35).setScale(1.5)
-        this.idle_dialogo = this.add.sprite(this.sprite_vendedor.x, this.sprite_vendedor.y, '_sprite_globo_dialogo').setOrigin(0.5, 1).setScale(0.8)
-
-        this.player = crearPersonaje(this, '_sprites_juan_cupul', datosEscena.entrada_a_escena, {
-            escalaPersonaje: 1.25,
-            xPersonaje: datosEscena.posicion.x,
-            yPersonaje: datosEscena.posicion.y
-        })
+        this.player = crearPersonaje(this, '_sprites_juan_cupul', entrada_a_escena, { escalaPersonaje: 1.25, }).setDepth(2)
 
         ajustarAreaColision(this.player, {
             sizeX: 0.28125,
@@ -71,7 +50,7 @@ export class Area_04 extends Phaser.Scene {
 
         // Salida Norte
         generarSalidaEscena(this, this.player, 'area_32', {
-            posicionX: posicion.x * 1.015,
+            posicionX: posicion.x,
             posicionY: posicion.y * 0.02,
             anchoSalida: posicion.x * 0.25,
             altoSalida: posicion.y * 0.15,
@@ -84,7 +63,7 @@ export class Area_04 extends Phaser.Scene {
         // Salida Este
         generarSalidaEscena(this, this.player, 'area_05', {
             posicionX: posicion.x * 2.015,
-            posicionY: posicion.y,
+            posicionY: posicion.y * 1.085,
             anchoSalida: posicion.y * 0.15,
             altoSalida: posicion.x * 0.25,
             valoresSiguienteEscena: { entrada: 'izq' },
@@ -96,7 +75,7 @@ export class Area_04 extends Phaser.Scene {
         // Salida Oeste
         generarSalidaEscena(this, this.player, 'area_03', {
             posicionX: 0 - posicion.x * 0.015,
-            posicionY: posicion.y,
+            posicionY: posicion.y * 1.085,
             anchoSalida: posicion.y * 0.15,
             altoSalida: posicion.x * 0.25,
             valoresSiguienteEscena: { entrada: 'der' },
@@ -105,47 +84,42 @@ export class Area_04 extends Phaser.Scene {
             }
         })
 
-        this.sprite_vendedor.anims.play('idle_vendedor')
-        this.sprite_vendedor.setSize(this.sprite_vendedor.width * 0.9, this.sprite_vendedor.height * 0.7)
-        this.sprite_vendedor.setOffset(this.sprite_vendedor.width * 0.025, this.sprite_vendedor.height * 0.35)
-        this.idle_dialogo.visible = false
-
-        this.interaccionVendedor = false
-
-        this.physics.add.overlap(this.player, this.sprite_vendedor, () => {
-            this.interaccionVendedor = true
-        }, null, this)
-
-        this.colisionVendedor = crearAreaColision(this, this.sprite_vendedor, {
-            ancho: this.sprite_vendedor.width * 0.65,
-            alto: this.sprite_vendedor.height * 0.45,
-            posicionX: this.sprite_vendedor.x * 0.998,
-            posicionY: this.sprite_vendedor.y * 1.18
+        this.grupo1 = crearGrupoElementos(this, '_arbol_5', {
+            width: 4,
+            repeticiones: 4,
+            posicionX: posicion.x * 0.15,
+            posicionY: posicion.y * 1.5,
+            cellWidth: 350,
+            escalaElemento: 0.75,
+            sizeWidth: 450,
+            sizeHeight: 100,
+            origenX: 0.65,
+            origenY: 1.1
         })
-        this.physics.add.collider(this.player, this.colisionVendedor, null, null, this)
-
-        this.timer = this.time.addEvent({
-            delay: 10,
-            callback: () => {
-                if (this.interaccionVendedor) {
-                    if (!this.idle_dialogo.anims.isPlaying) {
-                        this.idle_dialogo.visible = true
-                        this.idle_dialogo.anims.play('idle_dialogo')
-                        this.interaccionVendedor = false
-                    } else {
-                        this.interaccionVendedor = false
-                    }
-                } else {
-                    if (!this.idle_dialogo.anims.isPlaying) {
-                        this.idle_dialogo.visible = false
-                        this.idle_dialogo.anims.stop()
-                    }
-                }
-            },
-            callbackScope: this,
-            loop: true
+        this.grupo2 = crearGrupoElementos(this, '_arbol_5', {
+            width: 4,
+            repeticiones: 4,
+            posicionX: posicion.x * 0.05,
+            posicionY: posicion.y * 0.2,
+            cellWidth: 400,
+            escalaElemento: 0.75,
+            sizeWidth: 50,
+            sizeHeight: 60,
+            origenX: 0.65,
+            origenY: 1.1
         })
 
+        this.grupo1.setDepth(3)
+        this.grupo2.setDepth(1)
+
+        this.r1 = this.add.rectangle(posicion.x * 0.44, 0, posicion.x * 0.865, posicion.y * 0.19)
+        this.r2 = this.add.rectangle(posicion.x * 1.56, 0, posicion.x * 0.865, posicion.y * 0.19)
+
+        this.physics.world.enable([this.grupo1, this.grupo2, this.r2, this.r1])
+        this.r1.body.immovable = true
+        this.r2.body.immovable = true
+
+        this.physics.add.collider(this.player, [this.grupo1, this.grupo2, this.r1, this.r2])
 
     }
 
@@ -154,14 +128,5 @@ export class Area_04 extends Phaser.Scene {
         this.player.setVelocity(0)
 
         this.Movimientos.movimientoPersonaje(this.player)
-
-        if (cursors.acciones.confirmar.isDown && this.interaccionVendedor) {
-            this.scene.start('vendedor_pantalla_principal', {
-                key: 'area_04', posicion: {
-                    x: this.player.x,
-                    y: this.player.y
-                }
-            });
-        }
     }
 }

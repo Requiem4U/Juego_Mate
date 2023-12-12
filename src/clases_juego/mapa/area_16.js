@@ -1,5 +1,5 @@
 import Phaser from 'phaser'
-import { ajustarAreaColision, crearAnimacion, crearPersonaje, generarSalidaEscena } from '../manejadores/manejador_elementos_escena'
+import { ajustarAreaColision, crearPersonaje, generarSalidaEscena } from '../manejadores/manejador_elementos_escena'
 
 import { Manejador_Movimiento } from '../manejadores/manejador_movimientos'
 
@@ -36,9 +36,9 @@ export class Area_16 extends Phaser.Scene {
         })
 
         let posicion = { x: this.game.canvas.width / 2, y: this.game.canvas.height / 2 }
-        this.add.image(posicion.x, posicion.y, '_fondo_exterior_casa_juan').setScale(0.8, 0.735).setRotation(3.141593).setDepth(-1)
+        this.add.image(posicion.x, posicion.y, '_fondo_area_16').setScale(0.855, 0.785).setDepth(-1)
 
-        this.player = crearPersonaje(this, '_sprites_juan_cupul', entrada_a_escena, { escalaPersonaje: 1.25, })
+        this.player = crearPersonaje(this, '_sprites_juan_cupul', entrada_a_escena, { escalaPersonaje: 1.25, }).setDepth(1)
 
         ajustarAreaColision(this.player, {
             sizeX: 0.28125,
@@ -74,6 +74,23 @@ export class Area_16 extends Phaser.Scene {
             valoresSiguienteEscena: { entrada: 'izq' },
         })
 
+        this.arbol1 = this.physics.add.image(posicion.x * 1.322, posicion.y * 0.145, '_arbol_5').setScale(0.82).setDepth(2).setImmovable()
+        this.cuveta1 = this.physics.add.image(posicion.x * 1.37, posicion.y * 0.70, '_cubeta_2').setScale(0.82).setDepth(2).setImmovable()
+
+        this.arbol1.setSize(this.arbol1.width * 0.2, this.arbol1.height * 0.15)
+        this.arbol1.setOffset(this.arbol1.width * 0.38, this.arbol1.height * 0.85)
+
+        this.r1 = this.add.rectangle(posicion.x * 0.425, posicion.y * 0.57, posicion.x * 0.85, posicion.y)
+        this.r2 = this.add.rectangle(posicion.x * 0.46, posicion.y * 1.601, posicion.x * 0.85, posicion.y * 0.8)
+
+        this.physics.world.enable([this.r1, this.r2])
+        this.r1.body.immovable = true
+        this.r2.body.immovable = true
+
+        this.physics.add.collider(this.player, [
+            this.r1, this.r2, this.arbol1, this.cuveta1
+        ])
+
     }
 
     update () {
@@ -82,5 +99,12 @@ export class Area_16 extends Phaser.Scene {
 
         this.Movimientos.movimientoPersonaje(this.player)
 
+        if (this.player.y > 265) {
+            this.arbol1.setDepth(0)
+            this.cuveta1.setDepth(0)
+        } else {
+            this.arbol1.setDepth(2)
+            this.cuveta1.setDepth(2)
+        }
     }
 }

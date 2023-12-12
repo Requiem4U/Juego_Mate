@@ -1,0 +1,25 @@
+import VerificarGuardado from "./mecanicas/verificar_guardado";
+
+
+const verificador = new VerificarGuardado();
+
+
+
+// Llama al método verificar y maneja los datos obtenidos
+verificador.verificar().then(datos => {
+    // Maneja los datos obtenidos
+    if (datos !== undefined && datos !== null && datos.attributes!== undefined  ) {
+        const { evento, posicionX, posicionY } = datos.attributes;
+        if (evento && posicionX !== undefined && posicionY !== undefined) {
+            // Inicia la escena correspondiente con las posiciones recibidas
+            this.scene.start(evento, { x: posicionX, y: posicionY });
+        } else {
+            console.error('Los datos recibidos están incompletos.');
+            alert('Los datos recibidos están incompletos.');
+        }
+    } else {
+        // No se obtuvieron datos, o los datos no tienen la estructura esperada
+        console.log('Los datos no tienen la estructura esperada o son null/undefined.');
+        alert('No hay datos guardados, inicie una nueva partida.');
+    }
+});

@@ -1,0 +1,15 @@
+import Guardado from "./mecanicas/guardado";
+
+const guardado = new Guardado();
+
+
+
+const claveEscena = guardado.obtenerClaveEscenaActual();
+
+if (claveEscena !== null) {
+    console.log('Clave de la escena actual:', claveEscena);
+} else {
+    console.log('No se pudo obtener la clave de la escena actual.');
+}
+
+guardado.guardarDatos(claveEscena, 2.1, 1.12, 'QTE-1');

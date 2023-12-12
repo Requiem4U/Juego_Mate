@@ -3,8 +3,8 @@ import { ManejadorParpadeoLinea, repeticionAnimacion } from "../manejadores/mane
 
 // Cursores de selección
 let cursors = {
-    movimiento: { flechas: undefined, letras: undefined },
-    acciones: { confirmar: undefined }
+    movimiento: { flechas: undefined },
+    acciones: { confirmar: undefined, cacelar: undefined }
 }
 
 // Variables para texto subrayado
@@ -13,7 +13,7 @@ let underline = [undefined, undefined, undefined]
 
 //Texto Confirmacion
 let textoOpciones = [undefined, undefined, undefined]
-let listadoOpciones = ['Comprar', 'Preguntas', 'Cancelar']
+let listadoOpciones = ['Basta Matemático', 'Preguntas', 'Cancelar']
 let opcionSeleccionada = undefined
 
 // Estilo de texto
@@ -21,7 +21,7 @@ let style = undefined
 
 let configTimer = { parpadeo: undefined, animacion: { vendedor: undefined, canasta: undefined } }
 let lineaSelec = undefined
-let escenaAnterior
+let escenaAnterior = { key: 'a', posicion: { x: 10, y: 100 } }
 
 export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
 
@@ -30,9 +30,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
     }
 
     init (data) {
-        if (data) {
-            escenaAnterior = data
-        }
+        if (data) { escenaAnterior = data }
     }
 
     preload () {
@@ -40,8 +38,8 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
 
     create () {
         cursors.movimiento.flechas = this.input.keyboard.createCursorKeys();
-        cursors.movimiento.letras = this.input.keyboard.addKeys('W,A,S,D');
-        cursors.acciones.confirmar = this.input.keyboard.addKey('F')
+        cursors.acciones.confirmar = this.input.keyboard.addKey('ENTER')
+        cursors.acciones.cacelar = this.input.keyboard.addKey('ESC')
 
         let posicion = { x: this.game.canvas.width, y: this.game.canvas.height }
 
@@ -49,7 +47,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
         this.canasta = this.add.sprite(posicion.x * 0.25, posicion.y * 0.36, '_sprite_cesta_vendedor').setScale(3.5, 3.5)
         this.ojos_gato = this.add.sprite(posicion.x * 0.25, posicion.y * 0.36, '_sprite_ojos_gato').setScale(3.5, 3.5)
 
-        this.add.image(posicion.x / 2, posicion.y / 2, '_fondo_vegetacion').setScale(0.8, 1).setDepth(-1)
+        this.add.image(posicion.x / 2, posicion.y / 2, '_fondo_vendedor_tienda').setScale(0.8, 0.735).setDepth(-1)
         this.add.image(posicion.x / 2, posicion.y * 0.8, '_banner_dialogos').setAlpha(0.7).setScale(0.8, 1).setDepth(1)
         this.add.image(posicion.x * 0.75, posicion.y * 0.35, '_banner_contextos').setScale(0.8, 0.8).setDepth(1)
 
@@ -65,31 +63,31 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
 
         this.add.text(posicion.x / 2, posicion.y * 0.8, 'Bienvenido... Tengo algo que podria interesarte.', style).setOrigin(0.5).setDepth(2)
 
-        textoOpciones[0] = this.add.text(posicion.x * 0.64, posicion.y * 0.2, listadoOpciones[0], style).setDepth(2).setOrigin(0.5)
+        textoOpciones[0] = this.add.text(posicion.x * 0.6, posicion.y * 0.2, listadoOpciones[0], style).setDepth(2).setOrigin(0)
 
         bounds.comprar = textoOpciones[0].getBounds()
         underline[0] = this.add.graphics();
         underline[0].fillStyle(0xffffff, 1);
-        underline[0].fillRect(textoOpciones[0].x - bounds.comprar.width / 2, textoOpciones[0].y + bounds.comprar.height - 10, bounds.comprar.width, 5)
+        underline[0].fillRect(textoOpciones[0].x, textoOpciones[0].y + bounds.comprar.height, bounds.comprar.width, 5)
         underline[0].setDepth(2)
 
         lineaSelec = underline[0]
 
-        textoOpciones[1] = this.add.text(posicion.x * 0.65, posicion.y * 0.3, listadoOpciones[1], style).setDepth(2).setOrigin(0.5)
+        textoOpciones[1] = this.add.text(posicion.x * 0.6, posicion.y * 0.3, listadoOpciones[1], style).setDepth(2).setOrigin(0)
 
         bounds.preguntas = textoOpciones[1].getBounds()
         underline[1] = this.add.graphics();
         underline[1].fillStyle(0xffffff, 1);
-        underline[1].fillRect(textoOpciones[1].x - bounds.preguntas.width / 2, textoOpciones[1].y + bounds.preguntas.height - 10, bounds.preguntas.width, 5)
+        underline[1].fillRect(textoOpciones[1].x, textoOpciones[1].y + bounds.preguntas.height, bounds.preguntas.width, 5)
         underline[1].setDepth(2)
         underline[1].visible = false
 
-        textoOpciones[2] = this.add.text(posicion.x * 0.64, posicion.y * 0.4, listadoOpciones[2], style).setDepth(2).setOrigin(0.5)
+        textoOpciones[2] = this.add.text(posicion.x * 0.6, posicion.y * 0.4, listadoOpciones[2], style).setDepth(2).setOrigin(0)
 
         bounds.cancelar = textoOpciones[2].getBounds()
         underline[2] = this.add.graphics();
         underline[2].fillStyle(0xffffff, 1);
-        underline[2].fillRect(textoOpciones[2].x - bounds.cancelar.width / 2, textoOpciones[2].y + bounds.cancelar.height - 10, bounds.cancelar.width, 5)
+        underline[2].fillRect(textoOpciones[2].x, textoOpciones[2].y + bounds.cancelar.height, bounds.cancelar.width, 5)
         underline[2].setDepth(2)
         underline[2].visible = false
 
@@ -140,7 +138,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
     seleccion () {
         switch (true) {
             // Selección Opciones Hacia Arriba
-            case cursors.movimiento.flechas.up.isDown || cursors.movimiento.letras.W.isDown:
+            case cursors.movimiento.flechas.up.isDown:
                 if (opcionSeleccionada == 0) {
                     underline[opcionSeleccionada].visible = false
                     opcionSeleccionada = 2
@@ -155,7 +153,7 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
                 }
                 break
             // Selección Opciones Hacia Arriba
-            case cursors.movimiento.flechas.down.isDown || cursors.movimiento.letras.S.isDown:
+            case cursors.movimiento.flechas.down.isDown:
                 if (opcionSeleccionada == 2) {
                     underline[opcionSeleccionada].visible = false
                     opcionSeleccionada = 0
@@ -171,18 +169,21 @@ export class Escena_Vendedor_Pantalla_Principal extends Phaser.Scene {
                 break
             // Opción Comprar Items
             case cursors.acciones.confirmar.isDown && opcionSeleccionada == 0:
-                console.log(0)
+                this.scene.start('basta_matematico', escenaAnterior)
                 break
             // Opción Preguntas
             case cursors.acciones.confirmar.isDown && opcionSeleccionada == 1:
-                this.scene.start('pantalla_preguntas')
+                this.scene.start('pantalla_preguntas', escenaAnterior)
                 break
             // Opción Cancelar
-            case cursors.acciones.confirmar.isDown && opcionSeleccionada == 2:
+            case cursors.acciones.confirmar.isDown && opcionSeleccionada == 2 || cursors.acciones.cacelar.isDown:
                 this.timer.remove()
-                //this.scene.start('game')
                 this.scene.start(escenaAnterior.key, { entrada: 'vendedor', posicion: escenaAnterior.posicion })
                 break
         }
+    }
+
+    update () {
+
     }
 }

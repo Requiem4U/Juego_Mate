@@ -26,20 +26,30 @@ export class Pantalla_Inicio extends Phaser.Scene {
 
         let posicion = { x: this.game.canvas.width / 2, y: this.game.canvas.height / 2 }
 
-        this.add.image(posicion.x * 0.99, posicion.y * 0.975, '_fondo_pantalla_incio').setScale(0.77)
-        this.minijuego = this.physics.add.sprite(posicion.x * 0.994, posicion.y * 0.991, 'minijuego_incio').setScale(1.0125, 1.0016)
+        this.add.image(posicion.x * 0.99, posicion.y * 0.975, '_fondo_pantalla_incio').setScale(0.8)
+        this.minijuego = this.physics.add.sprite(posicion.x * 1.0325, posicion.y * 0.476, 'minijuego_incio').setScale(0.65)
 
-        crearAnimacion(this, '_sprite_minijuego_pantalla_inicio', 'animacion_minijuego_inicio', 0, 18, { frecuencia_frames: 6 })
         this.minijuego.anims.play('animacion_minijuego_inicio')
 
-        this.player = this.physics.add.sprite(posicion.x, posicion.y * 1.4, '_sprites_juan_cupul').setScale(0.8)
+        this.player = this.physics.add.sprite(posicion.x * 1.0325, posicion.y * 0.7, '_sprites_juan_cupul').setScale(0.8)
         this.player.anims.play('walkRight_juan')
 
-        this.btn_jugar = this.add.circle(posicion.x * 1.625, posicion.y * 1.44, 45, 0x000000, 0)
+        this.add.image(posicion.x, posicion.y, '_vidrio').setScale(0.8)
+
+        this.btn_jugar = this.add.circle(posicion.x * 1.18, posicion.y * 1.38, 45, 0x000000, 0)
         this.physics.world.enable(this.btn_jugar)
+        this.btn_jugar.body.setCircle(35)
         this.btn_jugar.setInteractive()
         this.btn_jugar.on('pointerdown', function (pointer) {
-            this.scene.start('seleccion_personaje')
+            this.scene.start('area_32_interior')
+        }, this);
+
+        this.btn_salir = this.add.circle(posicion.x * 1.345, posicion.y * 1.245, 45, 0x000000, 0)
+        this.physics.world.enable(this.btn_salir)
+        this.btn_salir.body.setCircle(35)
+        this.btn_salir.setInteractive()
+        this.btn_salir.on('pointerdown', function (pointer) {
+            this.scene.start('LoginScene')
         }, this);
 
     }

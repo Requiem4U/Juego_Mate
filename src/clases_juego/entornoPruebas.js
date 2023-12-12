@@ -32,7 +32,7 @@ export class Juego extends Phaser.Scene {
 
     this.add.image(posicion.x, posicion.y, '_fondo_vegetacion').setDepth(-1)
 
-    this.grupo1 = crearGrupoElementos(this, '_arbol_1')
+    this.grupo1 = crearGrupoElementos(this, '_arbol_1', { repeticiones: 2, cellWidth: 4 })
 
     this.idle = this.physics.add.sprite(posicion.x * 0.6, posicion.y * 0.8, '_sprites_mujer').setImmovable().setScale(3)
     this._sprite_vendedor = this.physics.add.sprite(posicion.x * 1.6, posicion.y * 0.8, '_sprite_vendedor').setOrigin(0.48, 0.35).setScale(1.25, 1.25).setImmovable()

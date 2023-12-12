@@ -1,11 +1,9 @@
-
 let matrizOperaciones = [[], [], [], []]
 let matrizRectangulos = [[], [], [], []]
 let operaciones = ['+', '-', '×', '÷', '√', '²']
-let posicionMatriz = { col: 1, fila: 1 }
-let valorActual
 let operacionesPresentadas = []
 let filas, columnas
+let repuestAnterrior
 
 export default class Basta_Matematico {
     constructor(escena, numFilas = 4, numColumnas = 5) {
@@ -78,39 +76,44 @@ export default class Basta_Matematico {
         return { matrizOperaciones, matrizRectangulos }
     }
 
-    comprobarRespuesta (respuesta, fila) {
-        let respAux = Number.parseInt(matrizOperaciones[fila][0].text)
-        console.log(respAux)
-
-        for (let col = 0; col < columnas - 1; col++) {
-            switch (operacionesPresentadas[col][0]) {
-                case '√':
-                    respAux = Number.parseFloat((Math.sqrt(respAux)).toFixed(2))
-                    console.log('√', respAux)
-                    break
-                case '²':
-                    respAux = Number.parseFloat((Math.pow(respAux, 2)).toFixed(2))
-                    console.log('²', respAux)
-                    break
-                case '÷':
-                    respAux = Number.parseFloat((respAux / Number.parseInt(operacionesPresentadas[col].slice(1))).toFixed(2))
-                    console.log('÷', respAux)
-                    break
-                case '×':
-                    respAux = Number.parseFloat((respAux * Number.parseInt(operacionesPresentadas[col].slice(1))).toFixed(2))
-                    console.log('×', respAux)
-                    break
-                case '+':
-                    respAux = Number.parseFloat((respAux + Number.parseInt(operacionesPresentadas[col].slice(1))).toFixed(2))
-                    console.log('+', respAux)
-                    break
-                case '-':
-                    respAux = Number.parseFloat((respAux - Number.parseInt(operacionesPresentadas[col].slice(1))).toFixed(2))
-                    console.log('-', respAux)
-                    break
-            }
+    comprobarRespuesta (respuesta, fila, col) {
+        const elevadorFloor = Math.pow(10, 2)
+        let respAux
+        if (repuestAnterrior) {
+            respAux = repuestAnterrior
+        } else {
+            respAux = Number.parseInt(matrizOperaciones[fila][0].text)
         }
-
-        return respAux == respuesta
+        switch (operacionesPresentadas[col - 1][0]) {
+            case '√':
+                respAux = Math.floor(Math.sqrt(respAux) * elevadorFloor) / elevadorFloor
+                console.log('√', respAux)
+                break
+            case '²':
+                respAux = Math.floor(Math.pow(respAux, 2) * elevadorFloor) / elevadorFloor
+                console.log('²', respAux)
+                break
+            case '÷':
+                respAux = Math.floor((respAux / Number.parseInt(operacionesPresentadas[col - 1].slice(1))) * elevadorFloor) / elevadorFloor
+                console.log('÷', respAux)
+                break
+            case '×':
+                respAux = Math.floor((respAux * Number.parseInt(operacionesPresentadas[col - 1].slice(1))) * elevadorFloor) / elevadorFloor
+                console.log('×', respAux)
+                break
+            case '+':
+                respAux = Math.floor((respAux + Number.parseInt(operacionesPresentadas[col - 1].slice(1))) * elevadorFloor) / elevadorFloor
+                console.log('+', respAux)
+                break
+            case '-':
+                respAux = Math.floor((respAux - Number.parseInt(operacionesPresentadas[col - 1].slice(1))) * elevadorFloor) / elevadorFloor
+                console.log('-', respAux)
+                break
+        }
+        if (respAux == respuesta) {
+            repuestAnterrior = respAux
+            return true
+        }
+        return false
     }
 }
