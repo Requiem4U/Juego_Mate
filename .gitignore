@@ -24,3 +24,4 @@ src/clases_juego/mecanicas
 *.njsproj
 *.sln
 *.sw?
+src
