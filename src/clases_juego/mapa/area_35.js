@@ -2,6 +2,7 @@ import Phaser from 'phaser'
 import { ajustarAreaColision, crearGrupoElementos, crearPersonaje, generarSalidaEscena, crearAreaColision } from '../manejadores/manejador_elementos_escena'
 
 import { Manejador_Movimiento } from '../manejadores/manejador_movimientos'
+import { apiUrl } from '../inicio/configuracion_general'
 
 let entrada_a_escena
 let posicion
@@ -23,6 +24,18 @@ let dialogoHistoriaTerminado = false
 let primerDialogoFilbertoTerminado = false
 let qteMostrado = false
 let qteTerminado = false
+
+// QTE
+const bd = []
+let bdAux
+let pregunta
+let contextoPregunta
+let preguntas
+
+let matrizRespuestas
+let posicionPregunta
+let posicionRespuesta
+let seleccionRespuestaActiva
 
 export class Area_35 extends Phaser.Scene {
 
@@ -159,10 +172,6 @@ export class Area_35 extends Phaser.Scene {
         this.r1.body.immovable = true
         this.r2.body.immovable = true
 
-        this.bomba = this.physics.add.image(posicion.x * 0.8, posicion.y, '_bomba_1').setDepth(0).setScale(0.75).setImmovable()
-        this.bomba.setSize(this.bomba.width, this.bomba.height * 0.5)
-        this.bomba.setOffset(0, this.bomba.height * 0.5)
-
         this.physics.add.collider(this.player, [
             this.r1, this.r2, this.casa, this.saco, this.caja, this.lenia, this.herramientas,
             this.bomba
@@ -173,6 +182,11 @@ export class Area_35 extends Phaser.Scene {
 
         if (!dialogoHistoriaTerminado) {
             this.crearPersonajeFilberto()
+
+            this.bomba = this.physics.add.image(posicion.x * 0.8, posicion.y, '_bomba_1').setDepth(0).setScale(0.75).setImmovable()
+            this.bomba.setSize(this.bomba.width, this.bomba.height * 0.5)
+            this.bomba.setOffset(0, this.bomba.height * 0.5)
+            this.physics.add.collider(this.player, this.bomba)
         }
 
         dialogos.filberto1 = [
@@ -182,14 +196,14 @@ export class Area_35 extends Phaser.Scene {
             'Filiberto Tun:\n\nSupongo que bien...',
             'Filiberto Tun:\n\nOye necesito tu ayuda con algo.',
         ]
-        //dialogos.filberto1 = ['Filiberto Tun:\n\nBuenos días, Juan, te traigo buenas noticias o tal vez no tan buenas para ti.',]
         dialogos.filberto2 = [
             'Filiberto Tun:\n\nVaya esa respuesta fue rápida, ¿qué hiciste?',
             'Juan Cupul:\n\nSimplemente pensé en el problema, me surgieron diferentes respuestas y escogí la correcta.',
             'Filiberto Tun:\n\nVaya eso es increíble.',
             'Juan Cupul:\n\nEso no es nada.',
-            'Filiberto Tun:\n\nBueno necesito irme, regresare más tarde.',
-            'Juan Cupul:\n\nEntiendo, entonces te estaré esperando.'
+            'Filiberto Tun:\n\nBueno iré a ver al brujo que esta al sur para asegurar un buen presagio. Acompañame.',
+            'Juan Cupul:\n\nSolo terminare de verificar algunas cosas aquí, te alcanzo luego.',
+            'Visita al brujo que está en el monte al SUR del pueblo.'
         ]
 
         partesDialogo = dialogos.filberto1.length
@@ -209,12 +223,12 @@ export class Area_35 extends Phaser.Scene {
 
         this.player.setVelocity(0)
 
-        if (!this.movimientoLimitado) {
+        if (!this.movimientoLimitado && !qteMostrado) {
             this.Movimientos.movimientoPersonaje(this.player)
         }
 
         if (cursors.acciones.interactuar.isDown) {
-            if (!dialogoHistoriaTerminado) {
+            if (!dialogoHistoriaTerminado && !qteMostrado) {
                 if (this.interaccionFilberto) {
                     if (!this.bannerTxt && !this.finTexto) {
                         this.movimientoLimitado = true
@@ -255,37 +269,29 @@ export class Area_35 extends Phaser.Scene {
                     this.bannerTxt.destroy()
                 if (!primerDialogoFilbertoTerminado) {
                     primerDialogoFilbertoTerminado = true
-                    /*this.movimientoLimitado = true
+                    this.time.delayedCall(850, () => {
+                        this.crearQTE()
+                    }, [], this)
+                }
+                if (mostrarSegundoDialogoFilberto && !dialogoHistoriaTerminado) {
+                    dialogoHistoriaTerminado = true
+                    this.movimientoLimitado = true
                     this.time.delayedCall(400, () => {
+                        this.areaFilberto.destroy()
                         this.tweens.add({
                             targets: this.filberto,
-                            x: posicion.x * 1.015,
-                            y: posicion.y * 1.55,
-                            duration: 800,
+                            x: posicion.x * 2,
+                            y: posicion.y,
+                            duration: 4000,
                             onComplete: () => {
                                 this.time.delayedCall(150, () => {
-                                    this.tweens.add({
-                                        targets: this.filberto,
-                                        x: posicion.x * 1.015,
-                                        y: posicion.y * 2,
-                                        duration: 800,
-                                        onComplete: () => {
-                                            this.filberto.destroy()
-                                            this.areaFilberto.destroy()
-                                            this.crearPersonajeNovia()
-                                        }
-                                    });
-                                    this.filberto.anims.play('walkDown_filberto');
+                                    this.filberto.destroy()
                                 });
-                                this.filberto.anims.play('idleFront_filberto')
+                                this.filberto.anims.play('idleRight_filberto')
                             }
                         });
-                        this.filberto.anims.play('walkLeft_filberto');
-                    }, [], this)*/
-                }
-                if (mostrarSegundoDialogoFilberto) {
-                    console.log('HT')
-                    dialogoHistoriaTerminado = true
+                        this.filberto.anims.play('walkRight_filberto');
+                    }, [], this)
                 }
                 this.time.delayedCall(800, () => {
                     partesDialogo = dialogos.filberto2.length
@@ -299,6 +305,7 @@ export class Area_35 extends Phaser.Scene {
                     } else {
                         this.movimientoLimitado = false
                     }
+                    console.log('b')
                 }, [], this)
 
             } else if (texto && this.permitirCambio) {
@@ -328,17 +335,240 @@ export class Area_35 extends Phaser.Scene {
             this.filberto.setDepth(0)
         }
 
-        if (this.player.y < this.bomba.y) {
+        if (this.bomba && this.player.y < this.bomba.y) {
             this.bomba.setDepth(2)
-        } else {
+        } else if (this.bomba) {
             this.bomba.setDepth(0)
         }
 
-        if (primerDialogoFilbertoTerminado) {
-            if (!qteMostrado) {
-                qteMostrado = true
-                console.log(1)
+    }
+
+    crearEscena () {
+        seleccionRespuestaActiva = false
+        posicionPregunta = 0
+        posicionRespuesta = 0
+
+        this.bannerPreguntas = this.add.image(posicion.x, posicion.y * 1.64, '_banner_dialogos').setScale(0.8, 1.1).setDepth(5)
+        this.bannerContexto = this.add.image(posicion.x * 1.5, posicion.y * 0.7, '_banner_contextos').setScale(0.8, 0.8).setDepth(5)
+
+        this.contextoP = this.add.text(posicion.x * 1.5, posicion.y * 0.7, contextoPregunta, {
+            fontFamily: 'Arial',
+            fontSize: 36,
+            fill: 'white',
+            wordWrap: { width: 525, useAdvancedWrap: true }
+        }).setOrigin(0.5).setDepth(6)
+
+        for (let i = 0; i <= 3; i++) {
+            preguntas[i].areaTexto = this.add.text(posicion.x * 0.2, posicion.y * 1.42, preguntas[i].pregunta, {
+                fontFamily: 'Arial',
+                fontSize: 36,
+                fill: 'white',
+                wordWrap: { width: posicion.x * 1.6, useAdvancedWrap: true }
+            }).setDepth(6)
+            preguntas[i].areaTexto.visible = false
+        }
+
+        preguntas[posicionPregunta].areaTexto.visible = true
+
+        matrizRespuestas = crearMatrizRespuestas(this, acomodarRespuestas(preguntas[0].respuestas))
+        matrizRespuestas[posicionRespuesta].setColor('#FFFFFF')
+
+        this.retro = { texto: undefined, background: undefined }
+        this.retro.texto = this.add.text(posicion.x * 0.26, posicion.y * 1.54, 'La respuesta ha sido incorrecta.\nAnaliza de nuevo el problema e intentalo de nuevo', {
+            fontFamily: 'Arial',
+            fontSize: 32,
+            color: '#FFFFFF',
+        }).setOrigin(0).setDepth(7)
+        this.retro.texto.visible = false
+        this.retro.background = this.add.image(posicion.x, posicion.y * 1.64, '_banner_dialogos').setScale(0.8, 1.1).setDepth(6)
+        this.retro.background.visible = false
+
+        this.input.keyboard.on('keyup', function (event) {
+            if (seleccionRespuestaActiva) {
+                switch (true) {
+                    case event.key == 'ArrowLeft':
+                        matrizRespuestas[posicionRespuesta].setColor('#cacaca')
+                        if (posicionRespuesta <= 0) {
+                            posicionRespuesta = 3
+                        } else {
+                            posicionRespuesta -= 1
+                        }
+                        matrizRespuestas[posicionRespuesta].setColor('#FFFFFF')
+                        break
+                    case event.key == 'ArrowRight':
+                        matrizRespuestas[posicionRespuesta].setColor('#cacaca')
+                        if (posicionRespuesta >= 3) {
+                            posicionRespuesta = 0
+                        } else {
+                            posicionRespuesta += 1
+                        }
+                        matrizRespuestas[posicionRespuesta].setColor('#FFFFFF')
+                        break
+                    case event.key == 'Enter':
+                        if (matrizRespuestas[posicionRespuesta].text.split(') ')[1] == preguntas[posicionPregunta].respuesta) {
+                            if (posicionPregunta < 3) {
+                                seleccionRespuestaActiva = false
+
+                                preguntas[posicionPregunta++].areaTexto.visible = false
+                                preguntas[posicionPregunta].areaTexto.visible = true
+                                actualizaRespuestas(acomodarRespuestas(preguntas[posicionPregunta].respuestas), matrizRespuestas)
+                                posicionRespuesta = 0
+                                matrizRespuestas.forEach((resp) => {
+                                    resp.setColor('#cacaca')
+                                })
+                                matrizRespuestas[posicionRespuesta].setColor('#ffffff')
+
+                                this.time.delayedCall(2000, () => { seleccionRespuestaActiva = true })
+                            } else {
+                                qteMostrado = false
+                                qteTerminado = true
+                                seleccionRespuestaActiva = false
+                                this.retro.background.visible = false
+                                this.retro.texto.visible = false
+                                this.bannerPreguntas.destroy()
+                                this.bannerContexto.destroy()
+                                this.contextoP.destroy()
+                                preguntas.forEach(element => element.areaTexto.destroy())
+                                matrizRespuestas.forEach(element => element.destroy())
+                                this.input.keyboard.removeListener('keyup')
+                            }
+                        } else {
+                            if (posicionPregunta < 3) {
+                                seleccionRespuestaActiva = false
+                                this.retro.texto.visible = true
+                                this.retro.background.visible = true
+                                actualizaRespuestas(acomodarRespuestas(preguntas[posicionPregunta].respuestas), matrizRespuestas)
+                                this.time.delayedCall(4000, () => {
+                                    seleccionRespuestaActiva = true
+                                    this.retro.background.visible = false
+                                    this.retro.texto.visible = false
+                                })
+                            } else {
+                                seleccionRespuestaActiva = false
+                                this.retro.texto.text = 'Has fallado. Intentalo de nuevo'
+                                this.retro.texto.visible = true
+                                this.retro.background.visible = true
+                                this.time.delayedCall(4000, () => {
+                                    seleccionRespuestaActiva = true
+                                    this.retro.background.visible = false
+                                    this.retro.texto.visible = false
+                                    this.bannerPreguntas.destroy()
+                                    this.bannerContexto.destroy()
+                                    this.contextoP.destroy()
+                                    preguntas.forEach(element => element.areaTexto.destroy())
+                                    matrizRespuestas.forEach(element => element.destroy())
+                                    this.input.keyboard.removeListener('keyup')
+                                    this.crearQTE()
+                                })
+                            }
+                        }
+                        break
+                    case event.key == 'Escape':
+                        if (posicionPregunta > 0) {
+
+                        }
+                        break
+
+                }
             }
+        }, this)
+
+
+        this.time.delayedCall(4000, () => { seleccionRespuestaActiva = true })
+    }
+
+    crearQTE () {
+        if (!bdAux) {
+            console.log(1)
+            fetch(apiUrl + '/api/preguntas?filters[QTE][$eq]=QTE-1'
+                , {
+                    method: 'GET',
+                    headers: {
+                        'Content-Type': 'application/json',
+                    },
+                })
+                .then(response => response.json())
+                .then(data => {
+                    if (data) {
+                        data.data.forEach(element => {
+                            bd.push({
+                                contexto: element.attributes.contexto,
+                                respQuien: element.attributes.quien,
+                                respQue: element.attributes.que,
+                                respOperaciones: element.attributes.operaciones,
+                                preguntaProblema: element.attributes.pregunta,
+                                respProblema: element.attributes.respuesta
+                            })
+                        });
+
+                        bdAux = [...bd]
+                        pregunta = obtenerPreguntaAleatoria()
+                        contextoPregunta = pregunta.contexto
+                        preguntas = [
+                            {
+                                pregunta: '¿De quién se habla en el problema?',
+                                respuestas: pregunta.respQuien.split(','),
+                                respuesta: pregunta.respQuien.split(',')[0],
+                                areaTexto: undefined
+                            },
+                            {
+                                pregunta: '¿De qué se habla en el problema?',
+                                respuestas: pregunta.respQue.split(','),
+                                respuesta: pregunta.respQue.split(',')[0],
+                                areaTexto: undefined
+                            },
+                            {
+                                pregunta: '¿Qué operaciones deberia hacer para resolver el problema?',
+                                respuestas: pregunta.respOperaciones.split(','),
+                                respuesta: pregunta.respOperaciones.split(',')[0],
+                                areaTexto: undefined
+                            },
+                            {
+                                pregunta: pregunta.preguntaProblema,
+                                respuestas: pregunta.respProblema.split(','),
+                                respuesta: pregunta.respProblema.split(',')[0],
+                                areaTexto: undefined
+                            },
+                        ]
+                        this.crearEscena()
+                        qteMostrado = true
+                    }
+                })
+                .catch(error => {
+                    this.movimientoLimitado = false
+                    console.error(error);
+                    // Manejar errores de autenticación
+                });
+        } else {
+            pregunta = obtenerPreguntaAleatoria()
+            contextoPregunta = pregunta.contexto
+            preguntas = [
+                {
+                    pregunta: '¿De quién se habla en el problema?',
+                    respuestas: pregunta.respQuien.split(','),
+                    respuesta: pregunta.respQuien.split(',')[0],
+                    areaTexto: undefined
+                },
+                {
+                    pregunta: '¿De qué se habla en el problema?',
+                    respuestas: pregunta.respQue.split(','),
+                    respuesta: pregunta.respQue.split(',')[0],
+                    areaTexto: undefined
+                },
+                {
+                    pregunta: '¿Qué operaciones deberia hacer para resolver el problema?',
+                    respuestas: pregunta.respOperaciones.split(','),
+                    respuesta: pregunta.respOperaciones.split(',')[0],
+                    areaTexto: undefined
+                },
+                {
+                    pregunta: pregunta.preguntaProblema,
+                    respuestas: pregunta.respProblema.split(','),
+                    respuesta: pregunta.respProblema.split(',')[0],
+                    areaTexto: undefined
+                },
+            ]
+            this.crearEscena()
         }
     }
 
@@ -384,4 +614,70 @@ export class Area_35 extends Phaser.Scene {
             loop: true
         })
     }
+}
+
+function crearMatrizRespuestas (escena, listaRespuestas) {
+    const width = escena.game.canvas.width
+    const height = escena.game.canvas.height
+
+    const x = width * 0.08
+
+    let matrizRespuestas = []
+
+    for (let i = 0; i <= 3; i++) {
+        let varX = x + width * 0.05 * (i * 4 + 1)
+        matrizRespuestas.push(escena.add.text(varX, height * 0.89, i + 1 + ') ' + listaRespuestas[i], {
+            fontFamily: 'Arial',
+            fontSize: 30,
+            color: '#cacaca',
+            align: 'left',
+            wordWrap: { width: 220, useAdvancedWrap: true },
+        }).setOrigin(0, 0.5).setDepth(6))
+    }
+
+    return matrizRespuestas
+
+}
+
+function acomodarRespuestas (listaRespuestas) {
+    let lista = listaRespuestas
+    let indiceActual = listaRespuestas.length;
+    let valorTemp, indiceRandom;
+
+    // Mientras haya elementos para mezclar
+    while (indiceActual !== 0) {
+        // Seleccionar un elemento restante
+        indiceRandom = Math.floor(Math.random() * indiceActual);
+        indiceActual--;
+
+        // Intercambiar con el elemento actual
+        valorTemp = lista[indiceActual];
+        lista[indiceActual] = lista[indiceRandom];
+        lista[indiceRandom] = valorTemp;
+    }
+
+    return lista;
+}
+
+function actualizaRespuestas (listaRespuestas, areasRespuestas) {
+    for (let i = 0; i <= 3; i++) {
+        areasRespuestas[i].text = i + 1 + ') ' + listaRespuestas[i]
+    }
+}
+
+function obtenerPreguntaAleatoria () {
+    let i
+    let pregunta
+    if (bdAux.length != 0) {
+        i = Math.floor(Math.random() * bdAux.length)
+        pregunta = bdAux[i]
+        bdAux.splice(i, 1)
+    } else {
+        bdAux = [...bd]
+        console.log(bdAux)
+        i = Math.floor(Math.random() * bdAux.length)
+        pregunta = bdAux[i]
+        bdAux.splice(i, 1)
+    }
+    return pregunta
 }

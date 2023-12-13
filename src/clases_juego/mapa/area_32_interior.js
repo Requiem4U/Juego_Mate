@@ -44,9 +44,6 @@ export class Area_32_Interior extends Phaser.Scene {
     create () {
 
         this.datosJg = new Datos_Jugador()
-        if (qtesResueltos.includes('QTE1')) {
-            this.datosJg.actualzizarAyudaControlesNPC_Disponible()
-        }
 
         cursors.acciones.interactuar = this.input.keyboard.addKey('F')
         cursors.acciones.pasarDialogo = this.input.keyboard.addKey('SPACE')
@@ -79,6 +76,8 @@ export class Area_32_Interior extends Phaser.Scene {
         posicion = { x: this.game.canvas.width / 2, y: this.game.canvas.height / 2 }
         this.pantallControles = this.add.image(posicion.x, posicion.y, '_pantalla_controles').setDepth(6).setScale(0.6)
         this.pantallControles.visible = false
+        this.pantallNarracion = this.add.image(posicion.x, posicion.y, '_pantalla_narracion').setDepth(6).setScale(0.8)
+        this.pantallNarracion.visible = false
 
         this.add.image(posicion.x, posicion.y, '_fondo_interior_casa_juan').setScale(0.8, 0.735)
         this.cama = this.physics.add.image(posicion.x * 0.5, posicion.y * 1.1, '_cama_1').setScale(1.7, 1.6)
@@ -136,8 +135,7 @@ export class Area_32_Interior extends Phaser.Scene {
             this.novia_juan.anims.play('idleFront_novia_juan')
         } else {
             this.time.delayedCall(800, () => {
-
-                this.pantallControles.visible = true
+                this.pantallNarracion.visible = true
                 this.i = false
                 this.a = this.add.text(posicion.x, posicion.y * 1.7, 'Presiona cualquier tecla', {
                     fontFamily: 'Arial',
@@ -160,11 +158,40 @@ export class Area_32_Interior extends Phaser.Scene {
                         this.i = false
                         this.a.destroy()
                         this.t.destroy()
-                        this.pantallControles.visible = false
+                        this.pantallNarracion.visible = false
 
                         this.time.delayedCall(1500, () => {
-                            crearPersonaje(this, { x: posicion.x * 1.015, y: posicion.y * 1.68 })
-                            moverPersonajeAnimado(this, this.novia_juan, posicion)
+                            this.pantallControles.visible = true
+                            this.i = false
+                            this.a = this.add.text(posicion.x, posicion.y * 1.7, 'Presiona cualquier tecla', {
+                                fontFamily: 'Arial',
+                                fontSize: 32,
+                                color: '#000000',
+                                align: 'left'
+                            }).setOrigin(0.5)
+                            this.a.setDepth(5)
+
+                            this.t = this.time.addEvent({
+                                loop: true,
+                                callbackScope: this,
+                                callback: () => { this.a.visible = !this.a.visible },
+                                delay: 650
+                            })
+
+                            this.time.delayedCall(4000, () => { this.i = true })
+                            this.input.keyboard.on('keyup', () => {
+                                if (this.i) {
+                                    this.i = false
+                                    this.a.destroy()
+                                    this.t.destroy()
+                                    this.pantallControles.visible = false
+
+                                    this.time.delayedCall(1500, () => {
+                                        crearPersonaje(this, { x: posicion.x * 1.015, y: posicion.y * 1.68 })
+                                        moverPersonajeAnimado(this, this.novia_juan, posicion)
+                                    }, [], this)
+                                }
+                            }, this)
                         }, [], this)
                     }
                 }, this)

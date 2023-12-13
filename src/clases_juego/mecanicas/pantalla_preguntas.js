@@ -24,9 +24,9 @@ let preguntas
 let matrizRespuestas
 let posicionPregunta
 let posicionRespuesta
+let seleccionRespuestaActiva
 
 let escenaOrigen
-let seleccionRespuestaActiva
 
 export class Pantalla_Preguntas extends Phaser.Scene {
 
@@ -144,10 +144,6 @@ export class Pantalla_Preguntas extends Phaser.Scene {
         posicionPregunta = 0
         posicionRespuesta = 0
 
-        cursors.movimiento.flechas = this.input.keyboard.createCursorKeys();
-        cursors.acciones.confirmar = this.input.keyboard.addKey('ENTER')
-        cursors.acciones.calcelar = this.input.keyboard.addKey('ESC')
-
         let posicion = { x: this.game.canvas.width, y: this.game.canvas.height }
 
         this.idle_vendedor_pp = this.add.sprite(posicion.x * 0.25, posicion.y * 0.4, '_sprite_vendedor_tienda').setScale(3, 3)
@@ -211,7 +207,7 @@ export class Pantalla_Preguntas extends Phaser.Scene {
             color: '#FFFFFF',
         }).setOrigin(0).setDepth(7)
         this.retro.texto.visible = false
-        this.retro.background = this.add.image(posicion.x / 2, posicion.y * 0.8, '_banner_dialogos').setScale(0.8, 1).setDepth(6)
+        this.retro.background = this.add.image(posicion.x / 2, posicion.y * 0.82, '_banner_dialogos').setScale(0.8, 1.1).setDepth(6)
         this.retro.background.visible = false
 
         this.input.keyboard.on('keyup', function (event) {
@@ -238,6 +234,8 @@ export class Pantalla_Preguntas extends Phaser.Scene {
                     case event.key == 'Enter':
                         if (matrizRespuestas[posicionRespuesta].text.split(') ')[1] == preguntas[posicionPregunta].respuesta) {
                             if (posicionPregunta < 3) {
+                                seleccionRespuestaActiva = false
+
                                 preguntas[posicionPregunta++].areaTexto.visible = false
                                 preguntas[posicionPregunta].areaTexto.visible = true
                                 actualizaRespuestas(acomodarRespuestas(preguntas[posicionPregunta].respuestas), matrizRespuestas)
@@ -246,6 +244,15 @@ export class Pantalla_Preguntas extends Phaser.Scene {
                                     resp.setColor('#cacaca')
                                 })
                                 matrizRespuestas[posicionRespuesta].setColor('#ffffff')
+
+                                this.time.delayedCall(2000, () => { seleccionRespuestaActiva = true })
+                            } else {
+                                this.retro.texto.text = '¡¡¡Felicidades!!! Haz logrado resolver todo correctamente.'
+                                this.retro.texto.visible = true
+                                this.retro.background.visible = true
+                                this.time.delayedCall(4000, () => {
+                                    this.scene.start('vendedor_pantalla_principal', escenaOrigen)
+                                })
                             }
                         } else {
                             seleccionRespuestaActiva = false
