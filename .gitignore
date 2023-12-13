@@ -12,6 +12,7 @@ dist
 dist - copia
 dist-ssr
 *.local
+src/clases_juego/mecanicas
 
 # Editor directories and files
 .vscode/*
