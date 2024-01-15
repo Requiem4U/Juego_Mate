@@ -1,0 +1,1 @@
+.contenedorJuego{width:100%;height:100vh;overflow:hidden}body,canvas{margin:0;padding:0}@media (max-width: 720px) or (max-height: 480px){.contenedorJuego,canvas,body{margin:0;padding:0}}
