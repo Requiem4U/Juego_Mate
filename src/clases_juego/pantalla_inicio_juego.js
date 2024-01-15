@@ -1,5 +1,4 @@
 import Phaser from "phaser";
-import { crearAnimacion } from "./manejadores/manejador_elementos_escena";
 import { Manejador_Movimiento } from "./manejadores/manejador_movimientos";
 
 const v_m_personaje = 160
@@ -22,6 +21,7 @@ export class Pantalla_Inicio extends Phaser.Scene {
     }
 
     create () {
+
         this.Movimientos = new Manejador_Movimiento(this)
 
         let posicion = { x: this.game.canvas.width / 2, y: this.game.canvas.height / 2 }
@@ -51,6 +51,13 @@ export class Pantalla_Inicio extends Phaser.Scene {
         this.btn_salir.on('pointerdown', function (pointer) {
             this.scene.start('LoginScene')
         }, this);
+
+
+        this.add.text(800, 385, 'Usa el mouse para seleccionar', {
+            fontSize: '30px',
+            fontStyle: 'bold',
+            color: '#000000',
+        }).setOrigin(0.5);
 
     }
 

@@ -43,16 +43,19 @@ export class Area_32 extends Phaser.Scene {
         cursors.acciones.pasarDialogo = this.input.keyboard.addKey('SPACE')
 
         dialogos.filberto = [
-            'Filiberto Tun:\n\nBuenos días, Juan, te traigo buenas noticias o tal vez no tan buenas para tí.',
-            'Juan Cupul:\n\nBuenos días, Filiberto, ¿qué quieres decirme con eso?',
+            'Filiberto Tun:\n\nBuenos días, Juan, te traigo buenas noticias o tal vez no tan buenas para ti.',
+            'Juan Cupul:\n\nBuenos días, Filiberto, que quieres decirme con eso.',
             'Filiberto Tun:\n\nEl plan se llevará a cabo pronto, pero para tu mala suerte será mañana y se'
             + '\ndecidió que cuidarías de la bomba esta noche.',
             'Juan Cupul:\n\n¡¡En serio!! ... Pero mañana es mi boda… ',
-            'Filiberto Tun:\n\nYa lo sé ... Lo siento ',
+            'Filiberto Tun:\n\nYa lo se ... Lo siento ',
             'Juan Cupul:\n\nNo te preocupes entiendo la importancia de esto y por eso lo hare, solo necesito'
             + '\nexplicarle esto a mi novia.',
             'Filiberto Tun:\n\nEntiendo, me adelantaré. Te veo en la milpa del Oeste.',
             'Juan Cupul:\n\nAhí estaré.'
+        ]
+        dialogos.filberto = [
+            'Filiberto Tun:\n\nBuenos días, Juan, te traigo buenas noticias o tal vez no tan buenas para ti.',
         ]
         dialogos.novia = [
             `${agregarTabs(40)}Juan le explica a Dolores lo que sucede...`,
@@ -61,7 +64,7 @@ export class Area_32 extends Phaser.Scene {
             'María Dolores:\n\nNo te preocupes, se lo importante que es esto, te estaré esperando aquí.',
             'Juan Cupul:\n\n¡¡Gracias!!',
             'Filiberto Tun:\n\nJeJe cuando te sientas cansado puedes volver aquí, te diré lo que necesites.',
-            'Juan Cupul:\n\nNos vemos luego. Regresaré.',
+            'Juan Cupul:\n\nNos vemos luego. Regresare.',
             'Juan Cupul:\n\nTe lo prometo.',
             'María Dolores:\n\nNos vemos.',
             `${agregarTabs(40)}Ve a la casa de la milpa que está al Oeste`

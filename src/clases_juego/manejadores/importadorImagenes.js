@@ -4,12 +4,22 @@ import { crearAnimacion } from "./manejador_elementos_escena";
 // Sprites
 import _sprite_cesta_vendedor from '../../assets/Personajes/Cesta_Vendedor_Style_Sheet.png'
 import _sprites_filberto from '../../assets/Personajes/Filberto_Style_Sheets_128x128.png'
+import _sprites_gallina_1 from '../../assets/Personajes/Gallina_Sheet_1.png'
+import _sprites_gallina_2 from '../../assets/Personajes/Gallina_Sheet_2.png'
+import _sprites_gallina_3 from '../../assets/Personajes/Gallina_Sheet_3.png'
+import _sprites_gallina_4 from '../../assets/Personajes/Gallina_Sheet_4.png'
+import _sprites_globo_dialogo_guardar from '../../assets/Personajes/Globo_Dialogo_Guardar.png'
 import _sprite_globo_dialogo from '../../assets/Personajes/GloboDialogo.png'
+import _sprites_guardar_pio from '../../assets/Personajes/Guardar_Pio_Sheet.png'
 import _sprites_hombre from '../../assets/Personajes/Hombre_Style_Sheets_128x128.png'
 import _sprites_juan_cupul from '../../assets/Personajes/Juan_C_Sprite_Style_Sheets.png'
 import _sprites_mujer from '../../assets/Personajes/Mujer_Style_Sheets_128x128.png'
 import _sprites_novia_juan from '../../assets/Personajes/Novia_Sprite_Sheet.png'
 import _sprite_ojos_gato from '../../assets/Personajes/Ojos_Gato_Vendedor_Style_Sheet.png'
+import _sprites_pavo_1 from '../../assets/Personajes/Pavo_Sheet_1.png'
+import _sprites_pollito_1 from '../../assets/Personajes/Pollito_Sheet_1.png'
+import _sprites_puerquito_1 from '../../assets/Personajes/Puerquito_Sheet_1.png'
+import _sprites_puerquito_2 from '../../assets/Personajes/Puerquito_Sheet_2.png'
 import _sprite_vendedor_mapa from '../../assets/Personajes/Vendedor_Style_Sheet_128x128.png'
 import _sprite_vendedor_tienda from '../../assets/Personajes/Vendedor_PP_Style_Sheet.png'
 
@@ -43,10 +53,14 @@ import _fondo_area_35 from '../../assets/Fondos/Fondo_A35.png'
 import _fondo_basta_mate from '../../assets/Fondos/Fondo_Basta_Matematico.png'
 import _fondo_pantalla_incio from '../../assets/Fondos/Fondo_Pantalla_Inicio.jpg'
 import _fondo_vegetacion from '../../assets/Fondos/Fondo_Seleccionar_Personaje.jpg'
-import _fondo_vendedor_tienda from '../../assets/Fondos/Fondo_Vendedor.png'
 import _fondo_formularios from '../../assets/Fondos/Fondo_Formularios.png'
 import _fondo_instrucciones_preguntas from '../../assets/Fondos/InstruccionesPreguntas.png'
 import _fondo_interior_casa_juan from '../../assets/Fondos/Interior_Casa_Juan_Cupul.jpg'
+import _fondo_vendedor_tienda from '../../assets/Fondos/Fondo_Vendedor.png'
+import _instruccion_basta_1 from '../../assets/Fondos/Instrucciones_Basta_1.jpg'
+import _instruccion_basta_2 from '../../assets/Fondos/Instrucciones_Basta_2.jpg'
+import _instruccion_basta_3 from '../../assets/Fondos/Instrucciones_Basta_3.jpg'
+import _instruccion_basta_4 from '../../assets/Fondos/Instrucciones_Basta_4.jpg'
 import _sprite_minijuego_pantalla_inicio from '../../assets/Fondos/MiniJuego_Pantalla_Inicio.png'
 import _pantalla_narracion from '../../assets/Fondos/Narracion.jpg'
 import _pantalla_controles from '../../assets/Fondos/Pantalla_Controles.png'
@@ -112,12 +126,22 @@ export class PrecargaImagenes extends Phaser.Scene {
         // Sprites
         this.load.spritesheet('_sprite_cesta_vendedor', _sprite_cesta_vendedor, { frameWidth: 208, frameHeight: 291 })
         this.load.spritesheet('_sprites_filberto', _sprites_filberto, { frameWidth: 128, frameHeight: 128 })
+        this.load.spritesheet('_sprites_gallina_1', _sprites_gallina_1, { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('_sprites_gallina_2', _sprites_gallina_1, { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('_sprites_gallina_3', _sprites_gallina_1, { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('_sprites_gallina_4', _sprites_gallina_1, { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('_sprites_globo_dialogo_guardar', _sprites_globo_dialogo_guardar, { frameWidth: 128, frameHeight: 128 })
         this.load.spritesheet('_sprite_globo_dialogo', _sprite_globo_dialogo, { frameWidth: 128, frameHeight: 128 })
+        this.load.spritesheet('_sprites_guardar_pio', _sprites_guardar_pio, { frameWidth: 64, frameHeight: 64 })
         this.load.spritesheet('_sprites_hombre', _sprites_hombre, { frameWidth: 128, frameHeight: 128 })
         this.load.spritesheet('_sprites_juan_cupul', _sprites_juan_cupul, { frameWidth: 128, frameHeight: 128 })
         this.load.spritesheet('_sprites_mujer', _sprites_mujer, { frameWidth: 128, frameHeight: 128 })
         this.load.spritesheet('_sprites_novia_juan', _sprites_novia_juan, { frameWidth: 128, frameHeight: 128 })
         this.load.spritesheet('_sprite_ojos_gato', _sprite_ojos_gato, { frameWidth: 208, frameHeight: 291 })
+        this.load.spritesheet('_sprites_pavo_1', _sprites_pavo_1, { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('_sprites_pollito_1', _sprites_pollito_1, { frameWidth: 64, frameHeight: 64 })
+        this.load.spritesheet('_sprites_puerquito_1', _sprites_puerquito_1, { frameWidth: 96, frameHeight: 96 })
+        this.load.spritesheet('_sprites_puerquito_2', _sprites_puerquito_2, { frameWidth: 96, frameHeight: 96 })
         this.load.spritesheet('_sprite_vendedor_tienda', _sprite_vendedor_tienda, { frameWidth: 208, frameHeight: 234 })
         this.load.spritesheet('_sprite_vendedor', _sprite_vendedor_mapa, { frameWidth: 128, frameHeight: 128 })
 
@@ -155,6 +179,10 @@ export class PrecargaImagenes extends Phaser.Scene {
         this.load.image('_fondo_formularios', _fondo_formularios)
         this.load.image('_fondo_instrucciones_preguntas', _fondo_instrucciones_preguntas)
         this.load.image('_fondo_interior_casa_juan', _fondo_interior_casa_juan)
+        this.load.image('_instruccion_basta_1', _instruccion_basta_1)
+        this.load.image('_instruccion_basta_2', _instruccion_basta_2)
+        this.load.image('_instruccion_basta_3', _instruccion_basta_3)
+        this.load.image('_instruccion_basta_4', _instruccion_basta_4)
         this.load.spritesheet('_sprite_minijuego_pantalla_inicio', _sprite_minijuego_pantalla_inicio, { frameWidth: 768, frameHeight: 432 })
         this.load.image('_pantalla_narracion', _pantalla_narracion)
         this.load.image('_pantalla_controles', _pantalla_controles)

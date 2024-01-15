@@ -16,13 +16,18 @@ export default class Basta_Matematico {
         width = this.escena.game.canvas.width,
         height = this.escena.game.canvas.height
     } = {}) {
+
+        matrizOperaciones = [[], [], [], []]
+        matrizRectangulos = [[], [], [], []]
+        operacionesPresentadas = []
+
         const x = width * 0.13
         const y = height * 0.175
 
         for (let col = 0; col < columnas; col++) {
-            let num = Math.floor(Math.random() * (100 * col - 100 * (col - 1) + 1)) + 100 * (col - 1)
+            let num = Math.floor(Math.random() * (10 * col - 10 * (col - 1) + 1)) + 10 * (col - 1)
             let operacion = operaciones[Math.floor(Math.random() * 6)]
-            let texto = operacion == '√' ? '√x' : operacion == '²' ? 'x' + operacion : operacion + num
+            let texto = operacion == '√' ? '√x' : operacion == '²' ? 'x' + operacion : operacion == '÷' && num == 0 ? '÷1' : operacion + num
             let varX = x + width * 0.04 * (col * 4 + 1)
 
             matrizRectangulos[0].push(this.escena.add.rectangle(varX, y + height * 0.06, 200, 100, 0xBE4C33).setOrigin(0.5))
@@ -49,7 +54,7 @@ export default class Basta_Matematico {
         for (let fila = 1; fila < filas; fila++) {
             let varY = y + height * 0.06 * (fila * 3 + 1)
 
-            let num = Math.floor(Math.random() * (333 * fila - 333 * (fila - 1) + 1)) + 333 * (fila - 1)
+            let num = Math.floor(Math.random() * (98 * fila - 150 * (fila - 1) + 1)) + 150 * (fila - 1)
 
             matrizRectangulos[fila].push(this.escena.add.rectangle(x + width * 0.04, varY, 200, 100, 0xF1C0B5).setOrigin(0.5))
             matrizOperaciones[fila].push(this.escena.add.text(x + width * 0.04, varY, num, {
@@ -72,18 +77,19 @@ export default class Basta_Matematico {
 
             }
         }
-
         return { matrizOperaciones, matrizRectangulos }
     }
 
-    comprobarRespuesta (respuesta, fila, col) {
+
+    comprobarRespuesta (respuesta, fila, col, reset = false) {
         const elevadorFloor = Math.pow(10, 2)
         let respAux
-        if (repuestAnterrior) {
+        if (repuestAnterrior && !reset) {
             respAux = repuestAnterrior
         } else {
             respAux = Number.parseInt(matrizOperaciones[fila][0].text)
         }
+        console.log(respAux)
         switch (operacionesPresentadas[col - 1][0]) {
             case '√':
                 respAux = Math.floor(Math.sqrt(respAux) * elevadorFloor) / elevadorFloor

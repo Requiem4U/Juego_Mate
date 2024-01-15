@@ -41,25 +41,25 @@ export class Agregar_Preguntas extends Phaser.Scene {
         });
         this.add.dom(774, 250).createFromHTML(`<textarea id="pregunta" type="textarea" style="${style}"></textarea>`);
 
-        this.add.text(415, 335, 'A que se refiere:', {
+        this.add.text(415, 335, '¿A que se refiere?', {
             fontSize: '25px',
             color: '#000000',
         });
         this.add.dom(774, 350).createFromHTML(`<input id="que" type="text" style="${style}">`);
 
-        this.add.text(380, 385, 'A quien se refiere:', {
+        this.add.text(380, 385, '¿A quien se refiere?', {
             fontSize: '25px',
             color: '#000000',
         });
         this.add.dom(774, 400).createFromHTML(`<input id="quien" type="text" style="${style}">`);
 
-        this.add.text(225, 435, 'Qué solución necesita seguir:', {
+        this.add.text(225, 435, '¿Qué solución necesita seguir?', {
             fontSize: '25px',
             color: '#000000',
         });
         this.add.dom(774, 450).createFromHTML(`<textarea id="operaciones" type="textarea" style="${style}"></textarea>`);
 
-        this.add.text(350, 535, 'Cual es la respuesta:', {
+        this.add.text(350, 535, '¿Cual es la respuesta?', {
             fontSize: '25px',
             color: '#000000',
         });

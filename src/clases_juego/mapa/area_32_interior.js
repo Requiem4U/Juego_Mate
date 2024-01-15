@@ -134,70 +134,23 @@ export class Area_32_Interior extends Phaser.Scene {
             crearPersonaje(this, { x: posicion.x * 1.1, y: posicion.y })
             this.novia_juan.anims.play('idleFront_novia_juan')
         } else {
-            this.time.delayedCall(800, () => {
-                this.pantallNarracion.visible = true
-                this.i = false
-                this.a = this.add.text(posicion.x, posicion.y * 1.7, 'Presiona cualquier tecla', {
-                    fontFamily: 'Arial',
-                    fontSize: 32,
-                    color: '#000000',
-                    align: 'left'
-                }).setOrigin(0.5)
-                this.a.setDepth(5)
+            this.pantallNarracion.visible = true
+            this.time.delayedCall(6000, () => { 
+            this.pantallNarracion.destroy()
+            this.time.delayedCall(100, () => {
+                this.pantallControles.visible = true
+                this.time.delayedCall(6000, () => {
+                    this.pantallControles.destroy()
+                    this.time.delayedCall(1500, () => {
+                        crearPersonaje(this, { x: posicion.x * 1.015, y: posicion.y * 1.68 })
+                        moverPersonajeAnimado(this, this.novia_juan, posicion)
+                    }, [], this)
 
-                this.t = this.time.addEvent({
-                    loop: true,
-                    callbackScope: this,
-                    callback: () => { this.a.visible = !this.a.visible },
-                    delay: 650
                 })
-
-                this.time.delayedCall(4000, () => { this.i = true })
-                this.input.keyboard.on('keydown', () => {
-                    if (this.i) {
-                        this.i = false
-                        this.a.destroy()
-                        this.t.destroy()
-                        this.pantallNarracion.visible = false
-
-                        this.time.delayedCall(1500, () => {
-                            this.pantallControles.visible = true
-                            this.i = false
-                            this.a = this.add.text(posicion.x, posicion.y * 1.7, 'Presiona cualquier tecla', {
-                                fontFamily: 'Arial',
-                                fontSize: 32,
-                                color: '#000000',
-                                align: 'left'
-                            }).setOrigin(0.5)
-                            this.a.setDepth(5)
-
-                            this.t = this.time.addEvent({
-                                loop: true,
-                                callbackScope: this,
-                                callback: () => { this.a.visible = !this.a.visible },
-                                delay: 650
-                            })
-
-                            this.time.delayedCall(4000, () => { this.i = true })
-                            this.input.keyboard.on('keyup', () => {
-                                if (this.i) {
-                                    this.i = false
-                                    this.a.destroy()
-                                    this.t.destroy()
-                                    this.pantallControles.visible = false
-
-                                    this.time.delayedCall(1500, () => {
-                                        crearPersonaje(this, { x: posicion.x * 1.015, y: posicion.y * 1.68 })
-                                        moverPersonajeAnimado(this, this.novia_juan, posicion)
-                                    }, [], this)
-                                }
-                            }, this)
-                        }, [], this)
-                    }
-                }, this)
 
             }, [], this)
 
+            })
             this.finTexto = false
 
             this.input.keyboard.on('keyup', (event) => { if (event.key == 'Escape') this.scene.start('pantalla_inicio') })

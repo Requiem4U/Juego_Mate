@@ -1,4 +1,4 @@
-export const apiUrl = 'http://api-rest-render-8ynf.omrender.com';
+export const apiUrl = 'https://api-rest-render-8ynf.onrender.com';
 
 export const styleButtom = `
     width: 150px;
